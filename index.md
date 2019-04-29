@@ -10,3 +10,4 @@ I have a Bachelor's degree on Mechanical Engineering and Automation.
 I started to blogging recently, so the following are my blogs.
 
 ## [My Lessons learned on C++](cpp/cpp.md)
+## [How to generate permutations](leetcode/permutations.md)
