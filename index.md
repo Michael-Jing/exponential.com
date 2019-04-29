@@ -11,3 +11,4 @@ I started to blogging recently, so the following are my blogs.
 
 ## [My Lessons learned on C++](cpp/cpp.md)
 ## [How to generate permutations](leetcode/permutations.md)
+## [A approach on continuous subarray problem](leetcode/898.bitwise-ors-of-subarrays.md)
