@@ -9,6 +9,6 @@ Welcome to Michael Jing's blog
 ## [A approach on continuous subarray problem](leetcode/898.bitwise-ors-of-subarrays.md)
 ## [Enlighting leetcode problems](leetcode/good_problems.md)
 ## [Commandline tips](linux/tips.md)
-## [Is $a^2+b^2=c^$](math/math.md)
+## [Is $ 2018^{1991}+2018^{1990}+1 $ prime or not](math/math.md)
 
-{% include lib / mathjax.html%}
+{% include lib/mathjax.html %}
