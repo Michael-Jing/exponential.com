@@ -1,8 +1,10 @@
-Welcome to Michael Jing's blog
-====
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
+layout: home
+---
 
- Along my life, I have learned so many things, but then I forgot. So, I am going to try to learn by doing and learn by writing.
 
 ## [My Lessons learned on C++](cpp/cpp.md)
 ## [How to generate permutations](leetcode/permutations.md)
@@ -11,5 +13,4 @@ Welcome to Michael Jing's blog
 ## [Commandline tips](linux/tips.md)
 ## [Is $ 2018^{1991}+2018^{1990}+1 $ prime or not](math/math.md)
 ## [A Sample Dockerfile for Python projects](docker.md)
-
 {% include lib/mathjax.html %}
