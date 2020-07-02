@@ -4,7 +4,33 @@ title:  "SSTables and LSM-Trees"
 date:   2020-07-02 17:54:00+0800
 categories: jekyll update
 ---
+# SSTables and LSM-Trees
+SStable stands for Sorted String Table, in which key sequence of key-value pairs is sorted by key. 
+* A compaction process is running in the background to merge SSTables and remove old values of keys. mergesort is used.
+* In memory index is sparse, keys between two consecutive indexed keys need to be scanned.
+* Since read requests need to scan over several key-value pairs in the requested range anyway, it is possible to group those records 
+into a block and compress it before writing it to disk.
 
+## Constructing and maintaining SSTables
+1.  When a write comes in, add it to an in-memory balanced tree data structure. This in-memory tree is sometimes called a memtable.
+2. When the memtable gets bigger than some threshold, write it out to disk as an SSTable file.
+3. In order to server a read request, first try to find the key in the memtable, then in on-disk segment
+4. run a compaction process to combine segment files and discard overwritten or deleted values.
+5. use a append log to recover from crash. 
+## Making an LSM-tree out of SSTables
+* use Bloom filter to efficiently detect keys that does not exist
+* size-tiered and leveled compaction
+    * size-tiered: newer and smaller SSTables are successively merged into older and larger SSTables.
+    * leveled compaction: the key range is split up into smaller SSTables and older data is moved into separate 'levels'
+# B-Trees
+## Making B-trees reliable
+* write-ahead log (WAL)
+* protecting the tree's data structures with latches (lightweight locks)
+## B-tree optimizations
+* copy-on-write. A modified page is witten to a different location, and a new version of the parent pages is created, pointing at the new location.
+* save space by abbreviating keys
+* additional pointers
+* borrow log-structured ideas
 # Comparing B-Trees and LSM-Trees
 * LSM-trees are typically faster for writes, whereas B-trees are thought to be faster for reads. Reads are typically slower on LSM-trees because they have to check several different data structures and SSTables at different stages of compaction.
 
