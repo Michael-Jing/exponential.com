@@ -6,11 +6,17 @@ categories: jekyll update
 ---
 What is Column-Oriented Storage? In Contrast to Row-Oriented Storage, each column of data is stored in 
 a seperate file, and all the column files store rows in the same order.
+
 # Column Compression
+
 Values in a column often look quite repetitive, so they can be compressed. 
+
 ## Bitmap Encoding
+
 we can take a column with n distinct values and turn it into n separate bitmaps: one bitmap for each distinct value, with one bit for each row. The bit is 1 if the row has that value, and 0 if not.
+
 ## Run-length encoding
+
 In run-length encoding, a sequence of "0, 4, 12, 2" stands for 0 zeros, 4 ones, 12 zeros, 2 ones.
 
 Using bitmap encoding, bitwise operation can be use to speed up queries.
