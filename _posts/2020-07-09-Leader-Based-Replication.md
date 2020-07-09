@@ -16,11 +16,13 @@ In Leader Based Replication, one node is designated as the leader, which receive
     * Advantage: the leader can continue processing writes, even if all of its followers have fallen behind.
     * Disadvantage: poential data loss.
   I may study chain replication if I have time.
+
 ## Setting Up New Followers
   1. Take a consistent snapshot of the leader's database at some point in time - if possible, without taking a lock on the entire database.
   2. Copy the snapshot to the new follewer node.
   3. The follower connects to the leader and requests all the data changes since the snapshot was taken. The snapshot is associated with an exact position in the leader's replication log.
   4. When the follower has processed the backlog of data changes since the snapshot, we say it has caught up.
+
 ## Handling Node Outages
   * Follower Failure: Catch-up recovery<br>
   connect to the leader and requst all the data changes since that last transaction before the outage.
@@ -34,6 +36,7 @@ In Leader Based Replication, one node is designated as the leader, which receive
     * Discarding writes is dangerous if other storage systems outside of the database need to be coordinated with the database contents.
     * Split brain: if both leaders accept writes, and there is no process for resolving conflicts, data is likely to be lost or corrupted.
     * What is the right timeout
+
 ## Implementationof Replication Logs
   * Statemen-based replication
     <br>
@@ -50,7 +53,8 @@ In Leader Based Replication, one node is designated as the leader, which receive
     A logical log for a relational database is usually a sequence of records describing writes to database tables at the granularity of a row.
   * Trigger-based replication
     Register custom application code that is automatically executed when a data change occures.
-## problems with Replication Lag
+
+## Problems with Replication Lag
   * Reading Your Own Writes
     * When reading something that the user may have modified, read it from the leader.
     * Track the time of the last update and, for one minute after the last update, make all reads from the leader.
@@ -70,4 +74,5 @@ In Leader Based Replication, one node is designated as the leader, which receive
   Consistent prefix reads guarantees that if a sequence of writes happens in a certain order, then anyone reading those writes will see them in the same order.
   <br>
   One solution is to make sure that any wirtes that are causally related to each other are written to the same partition.
+
 ## Solutions for Replication Lag
