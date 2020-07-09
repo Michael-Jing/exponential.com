@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Leader Based Replication"
-date:   2019-07-09 17:24:05 +0800
+date:   2020-07-09 17:24:05 +0800
 categories: jekyll update
 ---
 In Leader Based Replication, one node is designated as the leader, which receives write requests from clients, writes the new data to its local storage and also sends the data to all of its followers.
@@ -66,7 +66,7 @@ In Leader Based Replication, one node is designated as the leader, which receive
   <br>
   ![](pics/ConsistentPrefixReads.png)
 
-  
+
   Consistent prefix reads guarantees that if a sequence of writes happens in a certain order, then anyone reading those writes will see them in the same order.
   <br>
   One solution is to make sure that any wirtes that are causally related to each other are written to the same partition.
