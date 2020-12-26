@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>High Performance Python</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>High Performance Python</h1>
+<h1 id="high-performance-python">High Performance Python</h1>
+<h2 id="benchmarking-profiling">Benchmarking &amp; Profiling</h2>
+<h3 id="test-benchmarking">Test &amp; Benchmarking</h3>
+<ul>
+<li>tiem command</li>
+<li>timeit module in Python</li>
+<li>pytest-benchmark</li>
+<li>timeit as a decorator</li>
+<li>timeit as a context manager</li>
+</ul>
+<h3 id="find-bottlenecks">Find Bottlenecks</h3>
+<ul>
+<li>cProfile</li>
+<li>line_profiler</li>
+<li>memory_profiler</li>
+</ul>
+<h2 id="threads-synchronization">Threads Synchronization</h2>
+<h3 id="synchronization-primitives">Synchronization primitives</h3>
+<ul>
+<li>join</li>
+<li>Lock</li>
+<li>RLcok
+<ul>
+<li>谁拿谁放</li>
+<li>同一线程多次拿到</li>
+<li>拿多少次放多少次</li>
+</ul>
+</li>
+<li>condition</li>
+<li>semaphores</li>
+<li>Events</li>
+<li>barrier</li>
+</ul>
+<h3 id="concurrent-ds">Concurrent DS</h3>
+<h4 id="thread-safe-in-python">Thread-safe in Python</h4>
+<ul>
+<li>queue
+<ul>
+<li>Queue</li>
+<li>LifoQueue</li>
+<li>PriorityQueue</li>
+</ul>
+</li>
+<li>Deque</li>
+</ul>
+<h4 id="not-thread-safe-in-python">Not Thread-safe in Python</h4>
+<ul>
+<li>Set</li>
+<li>List</li>
+</ul>
+<h4 id="make-non-thread-safe-thread-safe">Make Non Thread-safe Thread-safe</h4>
+<ul>
+<li>Extend</li>
+<li>decorator for method</li>
+<li>decorator for class</li>
+</ul>
+<h2 id="executors-pools">Executors &amp; Pools</h2>
+<h3 id="based-on">Based on</h3>
+<ul>
+<li>Threads</li>
+<li>Process</li>
+</ul>
+<h3 id="apis">Apis</h3>
+<ul>
+<li>for test
+<ul>
+<li>set_exception</li>
+<li>set_result</li>
+<li>set_running_notify_cancel</li>
+</ul>
+</li>
+<li>shutdown
+<ul>
+<li>executor.shutdown</li>
+</ul>
+</li>
+<li>future objects apis
+<ul>
+<li>query
+<ul>
+<li>running</li>
+<li>done</li>
+<li>result</li>
+<li>exception</li>
+<li>as_completed</li>
+</ul>
+</li>
+<li>control
+<ul>
+<li>add_done_callback</li>
+<li>cancel</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="processes">Processes</h2>
+<h3 id="create">Create</h3>
+<ul>
+<li>multiprocessing.Process</li>
+<li>Inherit class Process</li>
+</ul>
+<h3 id="apis-1">Apis</h3>
+<ul>
+<li>name</li>
+<li>daemon</li>
+<li>terminate</li>
+</ul>
+<h3 id="synchronization">Synchronization</h3>
+<ul>
+<li>Lock</li>
+<li>Rlock</li>
+<li>Condition</li>
+<li>Semaphore</li>
+<li>Event</li>
+<li>Barrier</li>
+</ul>
+<h3 id="communicate">Communicate</h3>
+<ul>
+<li>Queue</li>
+<li>Pipe
+<ul>
+<li>bidirectional
+<ul>
+<li>multiprocessing.Pipe</li>
+</ul>
+</li>
+<li>unidirectional
+<ul>
+<li>os.pipe</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Manager</li>
+<li>multiprocessing.connection</li>
+</ul>
+<h3 id="pool">Pool</h3>
+<ul>
+<li>apply &amp; apply_async</li>
+<li>map &amp; map_async</li>
+<li>starmap &amp; starmap_async</li>
+<li>Imap &amp; Imap_unordered</li>
+<li>maxtaskperchild</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

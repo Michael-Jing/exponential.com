@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SSTables and LSM-Trees</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>SSTables and LSM-Trees</h1>
+<h1 id="sstables-and-lsm-trees">SSTables and LSM-Trees</h1>
+<p>SStable stands for Sorted String Table, in which key sequence of key-value pairs is sorted by key.</p>
+<ul>
+<li>A compaction process is running in the background to merge SSTables and remove old values of keys. mergesort is used.</li>
+<li>In memory index is sparse, keys between two consecutive indexed keys need to be scanned.</li>
+<li>Since read requests need to scan over several key-value pairs in the requested range anyway, it is possible to group those records
+into a block and compress it before writing it to disk.</li>
+</ul>
+<h2 id="constructing-and-maintaining-sstables">Constructing and maintaining SSTables</h2>
+<ol>
+<li>When a write comes in, add it to an in-memory balanced tree data structure. This in-memory tree is sometimes called a memtable.</li>
+<li>When the memtable gets bigger than some threshold, write it out to disk as an SSTable file.</li>
+<li>In order to server a read request, first try to find the key in the memtable, then in on-disk segment</li>
+<li>run a compaction process to combine segment files and discard overwritten or deleted values.</li>
+<li>use a append log to recover from crash.</li>
+</ol>
+<h2 id="making-an-lsm-tree-out-of-sstables">Making an LSM-tree out of SSTables</h2>
+<ul>
+<li>use Bloom filter to efficiently detect keys that does not exist</li>
+<li>size-tiered and leveled compaction
+<ul>
+<li>size-tiered: newer and smaller SSTables are successively merged into older and larger SSTables.</li>
+<li>leveled compaction: the key range is split up into smaller SSTables and older data is moved into separate 'levels'</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-trees">B-Trees</h1>
+<h2 id="making-b-trees-reliable">Making B-trees reliable</h2>
+<ul>
+<li>write-ahead log (WAL)</li>
+<li>protecting the tree's data structures with latches (lightweight locks)</li>
+</ul>
+<h2 id="b-tree-optimizations">B-tree optimizations</h2>
+<ul>
+<li>copy-on-write. A modified page is witten to a different location, and a new version of the parent pages is created, pointing at the new location.</li>
+<li>save space by abbreviating keys</li>
+<li>additional pointers</li>
+<li>borrow log-structured ideas</li>
+</ul>
+<h1 id="comparing-b-trees-and-lsm-trees">Comparing B-Trees and LSM-Trees</h1>
+<ul>
+<li>
+<p>LSM-trees are typically faster for writes, whereas B-trees are thought to be faster for reads. Reads are typically slower on LSM-trees because they have to check several different data structures and SSTables at different stages of compaction.</p>
+</li>
+<li>
+<p>Need to test systems with particular workload in order to make a valid comparison.</p>
+</li>
+</ul>
+<h2 id="advantages-of-lsm-trees">Advantages of LSM-trees</h2>
+<p>write amplification: one write to the database resulting in multiple writes to the disk over the course of the database's lifetime.</p>
+<ul>
+<li>
+<p>In write-heavy applications, the performance bottleneck might be the rate at which the database can write to disk. The more that a storage engine writes to disk, the fewer writes per second it can handle within the available disk bandwidth.</p>
+</li>
+<li>
+<p>LSM-trees are typically able to sustain higher write throughput than B-trees, partly because they sometimes have lower write amplification (depends on the storage engine configuration and workload), and partly because they sequentially write SSTable files</p>
+</li>
+<li>
+<p>LSM-trees can be compressed better</p>
+</li>
+<li>
+<p>SSD firmware may use a log-structured algorithm to turn random writes into sequential wirtes</p>
+</li>
+</ul>
+<h2 id="downsides-of-lsm-trees">Downsides of LSM-trees</h2>
+<ul>
+<li>The compaction process can sometimes interfere with the performance of ongoing reads and writes. the response time of queries to log-structured storage engines can sometimes be quite high</li>
+<li>At high write throughput, the compaction may cannot keep up with the rate of incoming writes.</li>
+<li>An advantage of B-trees is that each key exists in exactly one place, so transaction isolation is easier.</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

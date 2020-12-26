@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://randominit.xyz/sitemap.xml

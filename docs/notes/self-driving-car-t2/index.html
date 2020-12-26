@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1></h1>
+<h1 id="introduction-and-sensors">Introduction and Sensors</h1>
+<h2 id="radar-strengths-and-weaknesses">Radar Strengths and Weaknesses</h2>
+<p>Strengths:</p>
+<ol>
+<li>Because radar waves bounce off hard surfaces, they can provide measurements to
+objects without direct line of flight.</li>
+<li>Radar can see underneath other vehicles, and spot buildings and objects that
+would be obscured otherwise.</li>
+<li>Of all the sensors on the car, radar is the least affected by rain or fog and
+can have a wide field of view, about 150 degrees, or a long range, 200 plus meters.</li>
+</ol>
+<p>Weaknesses:</p>
+<ol>
+<li>Compared to lidars and cameras, radars have a low resolution.
+Especially in the vertical direction, the resolution is very limited.
+The lower resolution also means that reflections from static objects can cause
+problems. For example, manhole covers or a soda can lying on the street can have high radar reflectivity even though they are relatively small. It's called radar
+clutter and it's why current automotive radars usually disregard static objects.</li>
+</ol>
+<h2 id="lidar-strengths-and-weaknesses">Lidar Strengths and Weaknesses</h2>
+<p>lidar uses an infrared laser beam to determine the distance between the sensor and a nearby object.</p>
+<p>Strengths:</p>
+<ol>
+<li>Lidar has a much higher spatial resolution than radar because of the more focused laser beam, the larger number of scan layers in the vertical direction, and the high density of lidar points per layer.</li>
+</ol>
+<p>Weaknesses:</p>
+<ol>
+<li>The current generations of lidar can not measure the velocity of objects directly
+, and have to rely on the differing position between two or more scans.</li>
+<li>lidars are also more affected by weather conditions and by dirt on the sensor, which requires keeping them clean.</li>
+<li>They are also much bulkier than other sensors and therefore more difficult to integrate unless one just wants to mount a big scanner of the roof of the vehicle.</li>
+</ol>
+<p>Footnote on Lidar
+There are other possibilities to scan the laser beams. Instead of rotating the lasers or having a rotating mirror, we can scan the lidar with a vibrating micromirror. Those lidars are in development but none are commercially available now (as of March 2017).</p>
+<p>Instead of mechanically moving the laser beam, a similar principle to phased array radar can be employed. Dividing a single laser beam into multiple waveguides, the phase relationship between the waveguides can be altered and thereby the direction of the laser beam shifted. A company named Quanergy is working on systems like that. The advantage is that the form factor can be much smaller and that there are no moving parts.</p>
+<p>Another possibility is to use the laser as a gigantic flash like with a camera and then measuring the arrival times for all the objects with one big imaging photodiode array. This is in effect a 3D camera. The components are currently very expensive and currently this is used more in space and in terrain mapping applications.</p>
+<p><img src="./resources/self-driving-car/camera-lidar-radar.png" alt="Comparison of comera, radar and lidar" /></p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

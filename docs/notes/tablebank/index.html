@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Table Detection</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Table Detection</h1>
+<p>I am currently working on table detection and I will use this post to keep a memo of things I learned
+in the process</p>
+<h1 id="system-requirement">System Requirement</h1>
+<p>I finally installed detectron successfully, but I think that use a prebuilt docker image is the easiest way to get started, a Dockerfile is located in the docker folder</p>
+<ul>
+<li>Python2 with conda</li>
+<li>Caffe2
+Install Caffe2 by installing prebuilt pytorch binary</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
+
+</span></code></pre>
+<ul>
+<li>Cocoapi</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;"># COCOAPI=/path/to/clone/cocoapi
+git clone https://github.com/cocodataset/cocoapi.git $COCOAPI
+cd $COCOAPI/PythonAPI
+pip install cython
+# Install into global site-packages
+make install
+# Alternatively, if you do not have permissions or prefer
+# not to install the COCO API into global site-packages
+python setup.py install --user
+
+</span></code></pre>
+<ul>
+<li>Detectron</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">git clone https://github.com/facebookresearch/detectron
+pip install -r detectron/requirements.txt
+cd detectron &amp;&amp; make
+# in order to not accidently interfier with others, use CUDA_VISIBLE_DEVICES to specify the gpu you want to use
+python detectron/detectron/tests/test_spatial_narrow_as_op.py
+</span></code></pre><h1 id="inference-with-tablebank-pretrained-model">Inference with Tablebank pretrained model</h1>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">python tools/infer_simple.py --cfg $CONFIG_MODEL --output-dir /tmp/detectron-tablebank --image-ext jpg \
+    --wts $MODEL_PATH /home/shr/TableBank/data/Sampled_Detection_data/Latex/images
+</span></code></pre>
+<ol>
+<li>Download weights and configuration file from [Model Zoo]</li>
+</ol>
+<h1 id="resources">Resources</h1>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

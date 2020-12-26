@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ordering Guarantees</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Ordering Guarantees</h1>
+<h2 id="ordering-and-causality">Ordering and Causality</h2>
+<ul>
+<li>The causal order is not a total order</li>
+<li>Linearizability is stronger than causal consistency
+<br>
+Causal consistency is the strongest possible consistency model that does not slow down due to network delays,
+and remains available in the face of network failures.</li>
+</ul>
+<h2 id="sequence-number-ordering">Sequence Number Ordering</h2>
+<p>It's easy if there's a single leader
+<br></p>
+<h3 id="noncausal-sequence-number-generators">Noncausal sequence number generators</h3>
+<ul>
+<li>Each node generate its own independent set of sequence numbers</li>
+<li>Use time-of-day clock</li>
+<li>Preallocate blocks of sequence numbers</li>
+</ul>
+<h3 id="lamport-timestamps-provides-total-ordering">Lamport timestamps (provides total ordering)</h3>
+<ol>
+<li>Each node has a unique identifier, and each node keeps a counter of the number of operations it has processed</li>
+<li>The Lamport timestamp is a pair of (counter, node Id)</li>
+<li>Every node and every client keeps track of the maximum counter value it has seen so far, and includes that maximum on every request. When a node receives a request or response with a maximum counter value greater than
+its own counter value, it immediately increases its own counter to that maximum.</li>
+</ol>
+<h3 id="timestamp-ordering-is-not-sufficient">Timestamp ordering is not sufficient</h3>
+<p>unique username example, conflicts can only be detected after the fact.</p>
+<h2 id="total-order-broadcast">Total Order Broadcast</h2>
+<p>Total order broadcast is usually described as a protocal for exchanging messages between nodes. Informally, it requires that two safety properties always be satisfied:</p>
+<ul>
+<li>
+<p>Reliable delivery:
+<br>
+No messages are lost: If a message is delivered to one node, it is delivered to all nodes.</p>
+</li>
+<li>
+<p>Totally ordered delivery
+Messages are delivered to every node in the same order.</p>
+</li>
+</ul>
+<h3 id="implementing-linearizable-storage-using-total-order-broadcast">Implementing linearizable storage using total order broadcast</h3>
+<p>Use the unique username problem as an example
+<br></p>
+<ol>
+<li>Append a message to the log, tentatively indicating the username you want to claim.</li>
+<li>Read the log, and wait for the message you appended to be delivered back to you</li>
+<li>Check for any message claiming the username that you want. If the first message for your
+desired username is your own message, then you are successful: you can commit the username claim
+and acknowledge it to the cilent.
+While the above procedure ensures linearizable writes, it doesn't guarantee linearizable reads.
+<br> To make reads linearizable, there are a few options:</li>
+</ol>
+<ul>
+<li>You can sequence reads through the log by appending a message, reading the log, and performing
+the actual read when the message is delivered back to you.</li>
+<li>If the log allows you to fetch the position of the latest log message in a linearizable way, you
+can query that position, wait for all entries up to that position to be delivered, and then perform the read.</li>
+<li>Read from a synchronously updated replica.</li>
+</ul>
+<h3 id="implementing-total-order-broadcast-using-linearizable-storage">Implementing total order broadcast using linearizable storage</h3>
+<p>You have a linearizable register that stores an integer and that has atomic increment-and-get operation.
+for every message, you increment-and-get the linearizable integer, and then attach the value you got to the message
+as a sequence number.</p>
+<p>However, make a linearizable sequence number generator in a distributed environment needs a consensus algorithm.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

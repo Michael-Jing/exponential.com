@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leader Based Replication</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Leader Based Replication</h1>
+<p>In Leader Based Replication, one node is designated as the leader, which receives write requests from clients, writes the new data to its local storage and also sends the data to all of its followers.</p>
+<h2 id="synchronous-versus-asychronous-replication">Synchronous Versus Asychronous Replication</h2>
+<ul>
+<li>Synchronous<br>
+<ul>
+<li>Advantage: The follower is guaranteed to have an up-to-date copy of the data that is consistent with the leader.</li>
+<li>Disadvantage: If the synchronous follower does not respond, all writes will be blocked.<br>
+Typically, synchronous means one of the follower is synchronous and if the synchoronous follower becomes unavailable or slow, one of the
+asynchronous followers is made synchronous. This configuration is called semi-synchronous sometimes.</li>
+</ul>
+</li>
+<li>Asynchronous<br>
+<ul>
+<li>Advantage: the leader can continue processing writes, even if all of its followers have fallen behind.</li>
+<li>Disadvantage: poential data loss.
+I may study chain replication if I have time.</li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-new-followers">Setting Up New Followers</h2>
+<ol>
+<li>Take a consistent snapshot of the leader's database at some point in time - if possible, without taking a lock on the entire database.</li>
+<li>Copy the snapshot to the new follewer node.</li>
+<li>The follower connects to the leader and requests all the data changes since the snapshot was taken. The snapshot is associated with an exact position in the leader's replication log.</li>
+<li>When the follower has processed the backlog of data changes since the snapshot, we say it has caught up.</li>
+</ol>
+<h2 id="handling-node-outages">Handling Node Outages</h2>
+<ul>
+<li>Follower Failure: Catch-up recovery<br>
+connect to the leader and requst all the data changes since that last transaction before the outage.</li>
+<li>Leader failure: Failover
+<ol>
+<li>Determing that the leader has failed</li>
+<li>Choosing a new leader</li>
+<li>Reconfiguring the system to use the new leader. (the old leader may still believe that it is the leader)
+<br>
+Failover is fraught with things that can go wrong:</li>
+</ol>
+<ul>
+<li>If asynchronous replication is used, the new leader may have fallen behind, and there maybe conflicts if the former leader rejoins the cluster.</li>
+<li>Discarding writes is dangerous if other storage systems outside of the database need to be coordinated with the database contents.</li>
+<li>Split brain: if both leaders accept writes, and there is no process for resolving conflicts, data is likely to be lost or corrupted.</li>
+<li>What is the right timeout</li>
+</ul>
+</li>
+</ul>
+<h2 id="implementationof-replication-logs">Implementationof Replication Logs</h2>
+<ul>
+<li>
+<p>Statemen-based replication
+<br>
+there are various ways in which this approach can break down:</p>
+<ul>
+<li>Statement that calls a nondeterministic function, such as NOW()</li>
+<li>If statements use an autoincrementing column, or if they dpend on the existing data in the database, they must be executed in exactly the same order on each replica.</li>
+<li>Statements that have side effects(e.g., triggers, stored procedures, user-defined functions) unless they are absolutely deterministic.</li>
+</ul>
+</li>
+<li>
+<p>Write-ahead log(WAL) shipping
+<br>
+Disadvantage: a WAL contains details of which bytes were changed in which disk blocks. This makes replication closely coupled to the storage engine.</p>
+</li>
+<li>
+<p>Logical (row-based) log replication
+<br>
+A logical log for a relational database is usually a sequence of records describing writes to database tables at the granularity of a row.</p>
+</li>
+<li>
+<p>Trigger-based replication
+Register custom application code that is automatically executed when a data change occures.</p>
+</li>
+</ul>
+<h2 id="problems-with-replication-lag">Problems with Replication Lag</h2>
+<ul>
+<li>Reading Your Own Writes
+<ul>
+<li>When reading something that the user may have modified, read it from the leader.</li>
+<li>Track the time of the last update and, for one minute after the last update, make all reads from the leader.</li>
+<li>The client can remember the timestamp (logical or actual system clock) of its most recent write - then the system can ensure that the replica serving any reads for that user reflects updates at least until that timestamp.
+<br>
+Another complication arises when the same user is accessing your service from multiple devices. In this case you may want to provide cross-device read-after-write consistency. In this case, there are some additional issues to consider:</li>
+<li>Approaches that require remembering the timestamp of the user's last update become more difficult, because code running on one device doesn't know what updates have happened on the other device. This metadata will need to be centralized</li>
+</ul>
+</li>
+<li>Monotonic Reads
+The issue is if a user first reads from fresh replica, then from a stale replica, Time appears to go backward.
+<br>
+Make sure each user always read from the same replica.</li>
+<li>Consistent Prefix Reads
+<br>
+<img src="pics/ConsistentPrefixReads.png" alt="" /></li>
+</ul>
+<p>Consistent prefix reads guarantees that if a sequence of writes happens in a certain order, then anyone reading those writes will see them in the same order.
+<br>
+One solution is to make sure that any wirtes that are causally related to each other are written to the same partition.</p>
+<h2 id="solutions-for-replication-lag">Solutions for Replication Lag</h2>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

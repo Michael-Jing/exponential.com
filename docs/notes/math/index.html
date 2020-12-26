@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1></h1>
+<h1 id="is-2018-1991-2018-1990-1-prime-or-not">Is $ 2018^{1991}+2018^{1990}+1 $ prime or not</h1>
+<p>\begin{equation} 
+\begin{aligned}
+a^{1991} + a^{1990} + 1 \
+&amp;= a^{1991} + a^{1990} + 1 + a^{1989} - a^{1989} \
+&amp;= (a^2 + a + 1)a^{1989} - (a^{1989} - 1) \
+&amp;= (a^2 + a + 1)a^{1989} - (a^3 - 1)(a^{1989} - 1) / (a^3 - 1) \
+&amp;= (a^2 + a + 1)a^{1989} - (a - 1)(a^2 + a + 1)(a^{1989} - 1)/(a^3 - 1) \
+&amp;= (a^2 + a + 1)(a^{1989} - (a - 1)(a^{1989} - 1)/(a^3 - 1)) \
+&amp;= (a^2 + a + 1)(a^{1989} - (a - 1)({a^3}^{663} - 1)/(a^3 - 1)) \
+&amp;= (a^2 + a + 1)(a^{1989} - (a - 1)(A^{663} - 1)/(A - 1)) \
+&amp;= (a^2 + a + 1)(a^{1989} - (a - 1)(A^{662} + A^{661} + ... + 1))
+\end{aligned}
+\end{equation}</p>
+<p>{% include lib/mathjax.html %}</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Threads in Python</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Threads in Python</h1>
+<h1 id="threads-in-python">Threads in Python</h1>
+<h2 id="types-of-os-threads">Types of OS threads</h2>
+<ul>
+<li>POSIX</li>
+<li>Windows</li>
+</ul>
+<h2 id="user-threads-models">user threads models</h2>
+<ul>
+<li>1 - 1</li>
+<li>M - 1</li>
+<li>M - N</li>
+</ul>
+<h2 id="states">States</h2>
+<ul>
+<li>
+<p>New</p>
+</li>
+<li>
+<p>Runnable</p>
+</li>
+<li>
+<p>Running</p>
+</li>
+<li>
+<p>Not runnable</p>
+</li>
+<li>
+<p>Dead</p>
+</li>
+</ul>
+<h2 id="create-threads">Create threads</h2>
+<ul>
+<li>threading.Thread</li>
+<li>Inherit Thread class</li>
+<li>fork</li>
+</ul>
+<h2 id="apis">Apis</h2>
+<ul>
+<li>setDaemon(True)</li>
+<li>threading.current_thread()</li>
+<li>threading.main_thread()</li>
+<li>threading.enumerate()</li>
+<li>threading.active_count()</li>
+</ul>
+<h2 id="gracefully-terminate">Gracefully terminate</h2>
+<ul>
+<li>you can not, process has terminate() method</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

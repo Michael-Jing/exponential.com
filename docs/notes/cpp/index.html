@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1></h1>
+<h1 id="what-i-learned-when-using-c">What I learned when using C++</h1>
+<p>Recently I started  using the C++ programming language since I am learning the Udacity
+Self-Driving-Car Nanodgree program Term2 and one of the projects is implementing an 
+extended Kalman Filter in C++. I am writing to document the tricky part of C++ here that
+I learned.</p>
+<h1 id="not-dividing-by-zeros">Not Dividing by zeros</h1>
+<p>Like in pure math and any other programing languages, dividing by zero is always a probaylem,
+So we should avoid dividing by zeros. We probably will not write code like <code>some_variable / 0;</code> 
+, the issue is that dividing by zeros will happen in functions we called if do not pay attention 
+to the parameters we passed in, for example, in <code>py = 1; px = 0; atan2(py, px)</code>, a dividing by 
+zeros error will occur.</p>
+<h1 id="pay-attention-to-data-types">Pay attention to data types</h1>
+<p>In my implementation of the extended Kalman filter, the result is not as expected in the 
+beginning and I found that the issue arise from my calculation for  $$\Delta t$$ in the 
+following code.</p>
+<p><code>double dt = (current_timestamp - previous_timestamp) / 1000000</code></p>
+<p>here both current_timestamp and previous_timestamp are long and their difference is 
+always less than 1000000 since the measurement comes one after another within very short 
+time, as a result dt will be zero always, this causes the kalman Filter to predict exactly 
+the same state as the current and thus not doing a good work.</p>
+<p>After I changed the code as the following, things start to work.</p>
+<p><code>double dt = (double)(current_timestamp - previous_timestamp) / 1000000</code></p>
+<p>or </p>
+<p><code>double dt = (current_timestamp - previous_timestamp) / 1000000.0</code></p>
+<p>please notice that</p>
+<p><code>double dt = (current_timestamp - previous_timestamp) / 1000000L</code></p>
+<p>is not working.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

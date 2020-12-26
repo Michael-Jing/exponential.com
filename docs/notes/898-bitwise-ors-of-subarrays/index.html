@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1></h1>
+<p>The problem:
+We have an array of non-negative integers.
+For every (contiguous) subarray B = [A[i], A[i+1], ..., A[j]]  (with i &lt;= j),
+we take the bitwise OR of all the elements in B, obtaining a result A[i] | 
+A[i+1] | ... | A[j].</p>
+<p>Return the number of possible results. (Results that occur more than once ary only counted once
+in the final answer.)</p>
+<p>possible approaches:
+of course the first thing come to my mind is the brute force approch, but I know that 
+it barely the right way to go in such kind of problems, since if solve every problem
+the brute force way, then way borther learning algorithms. </p>
+<p>The next thing to try is some kind of prefix array to store the temporary results,
+for example we can have a array, in which the element prefix[i] is the OR of all
+the elements from the begining of the input array up to A[i], and then we can 
+use prefix[i] and prefix[j] to compute the results for A[i] ... A[j]. However
+this approach is not working in this problem.</p>
+<p>Another approach(and the right approach for this problem)
+Another approach is that we use a container to store the temporary results, and when
+we see a new element n, we use |= to update each element in the container, and we
+also add the new element n to the container, this is actually very like the prefix 
+approch, in which we keep track of the results from the begining to a certain element,
+but in this case, we keep track of the results from each of the elements before
+a certain element to that element.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes</title>
+  <meta name="description" content="Theme for Zola inspired from Pelican website theme">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+
+
+
+  
+  
+  
+  <section class="card preview">
+      <div class="date">2020-08-10T14:53:00</div>
+      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;high-performance-python&#x2F;">High Performance Python</a></h1>
+      <div>High Performance Python
+Benchmarking &amp;amp; Profiling
+Test &amp;amp; Benchmarking
+
+tiem command
+timeit module in Python
+pytest-benchmark
+timeit as a decorator
+timeit as a context manager
+
+Find Bottlenecks
+
+cProfile
+line_profiler
+memory_profiler
+
+Threads Synchronization
+Synchronization primitives
+
+join
+Lock
+RLcok
+
+谁拿谁放
+同一线程多次拿到
+拿多少次放多少次
+
+
+condition
+semaphores
+Events
+barrier
+
+Concurrent DS
+Thread-safe in Python
+
+queue
+
+Queue
+LifoQueue
+PriorityQueue
+
+
+Deque
+
+Not Thread-safe in Python
+
+Set
+List
+
+Make Non Thread-safe Thread-safe
+
+Extend
+decorator for method
+decorator for class
+
+Executors &amp;amp; Pools
+Based on
+
+Threads
+Process
+
+Apis
+
+for test
+
+set_exception
+set_result
+set_running_notify_cancel
+
+
+shutdown
+
+executor.shutdown
+
+
+future objects apis
+
+query
+
+running
+done
+result
+exception
+as_completed
+
+
+control
+
+add_done_callback
+cancel
+
+
+
+
+
+Processes
+Create
+
+multiprocessing.Process
+Inherit class Process
+
+Apis
+
+name
+daemon
+terminate
+
+Synchronization
+
+Lock
+Rlock
+Condition
+Semaphore
+Event
+Barrier
+
+Communic…</div> 
+  </section>
+  
+
+
+
+
+<section class="card feed">
+  
+
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;python-threads&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-08-09T20:31:00</div>
+      <h3>Threads in Python</h3>
+      <p>
+        
+          Threads in Python
+Types of OS threads
+
+POSIX
+Windows
+
+user threads models
+
+1 - 1
+M - 1
+M - N
+
+States
+
+
+New
+
+
+Runnable
+
+
+Running
+
+
+Not runnable
+
+
+Dead
+
+
+Create threads
+
+threading.Thread
+Inherit Thread class
+fork
+
+Apis
+
+setDaemon(True)
+threading.current_thread()
+threading.main_thread()
+threading.enume… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;partitioning&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-08-09</div>
+      <h3></h3>
+      <p>
+        
+          
+
+
+
+
+
+Markmap
+
+* {
+  margin: 0;
+  padding: 0;
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+
+
+
+
+((t,a,e,n)=&gt;{const{Markmap:o,loadPlugins:s}=window.markmap;(a?a(s,e,n):Promise.resolve()).then(()=&gt;{o.create(&quot;svg#mindmap&quot;,null,t)})})({&quot;t&quot;:&quot;heading&quot;,&quot;d&quot;:1,&quot;v&quot;:&quot;Partitioning&quot;,&quot;c&quot;:[{&quot;t&quot;… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;ordering-guarantees&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-29T16:15:05</div>
+      <h3>Ordering Guarantees</h3>
+      <p>
+        
+          Ordering and Causality
+
+The causal order is not a total order
+Linearizability is stronger than causal consistency
+
+Causal consistency is the strongest possible consistency model that does not slow down due to network delays,
+and remains available in the face of network failures.
+
+Sequence Number Ord… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;linearizability&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-29T15:33:05</div>
+      <h3>Linearizability</h3>
+      <p>
+        
+          What is linearizability? The basic idea is make a system appear as if there were only one copy of the data,
+and all operations on it are atomic.
+What makes a system linerizable
+
+Read operation completes before a write operation begins, must return the old value
+Read operation begins after a write op… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;leader-based-replication&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-09T17:24:05</div>
+      <h3>Leader Based Replication</h3>
+      <p>
+        
+          In Leader Based Replication, one node is designated as the leader, which receives write requests from clients, writes the new data to its local storage and also sends the data to all of its followers.
+Synchronous Versus Asychronous Replication
+
+Synchronous
+
+Advantage: The follower is guaranteed to h… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;multi-leader-replication&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-09T16:55:05</div>
+      <h3>Multi-Leader Replication</h3>
+      <p>
+        
+          A natural extension of the leader-based replication model is to allow more than one node to accepts, which requires Multi-Leader Replication. Within each datacenter, regular leader-follower replication is used; between datacenters, each datacenter&#x27;s leader replicates
+its changes to the leaders in ot… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;column-oriented-storage&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-03T20:22:00</div>
+      <h3>Column-Oriented Storage</h3>
+      <p>
+        
+          What is Column-Oriented Storage? In Contrast to Row-Oriented Storage, each column of data is stored in
+a seperate file, and all the column files store rows in the same order.
+Column Compression
+Values in a column often look quite repetitive, so they can be compressed.
+Bitmap Encoding
+we can take a c… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;sstables-and-lsm-trees&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-07-02T17:54:00</div>
+      <h3>SSTables and LSM-Trees</h3>
+      <p>
+        
+          SSTables and LSM-Trees
+SStable stands for Sorted String Table, in which key sequence of key-value pairs is sorted by key.
+
+A compaction process is running in the background to merge SSTables and remove old values of keys. mergesort is used.
+In memory index is sparse, keys between two consecutive ind… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;home-directoy-is-full&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2019-12-10T12:07:00</div>
+      <h3>Manage Home Directory</h3>
+      <p>
+        
+          We share GPU box and we use anaconda to manage our Python environments these days. Then sooner or
+later we&#x27;ll encounter the issue that the home directory of the box is full. In this case, we can
+use the following procedure to solve the problem
+
+cd ~
+# Find out which file or directory uses the most s… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;ocr-summary&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2019-12-09T16:33:05</div>
+      <h3>OCR Summary</h3>
+      <p>
+        
+          Service Providers &amp;amp; Libraries
+Service Providers
+
+Alibaba (Table Recognition &amp;amp; Recognition based on custom templates)
+Google (Text Detection &amp;amp;&amp;amp; Document Text Detection, table recognition in alpha phase)
+Amazon: (Textract, with table recognition capability)
+[ABBYY]:
+Ocrolus
+
+Open Sourc… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;tablebank&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2019-12-05</div>
+      <h3>Table Detection</h3>
+      <p>
+        
+          I am currently working on table detection and I will use this post to keep a memo of things I learned
+in the process
+System Requirement
+I finally installed detectron successfully, but I think that use a prebuilt docker image is the easiest way to get started, a Dockerfile is located in the docker fo… 
+        
+      </p>
+    </div>
+  </a>
+
+
+</section>
+
+
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

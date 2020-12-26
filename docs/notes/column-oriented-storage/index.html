@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Column-Oriented Storage</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Column-Oriented Storage</h1>
+<p>What is Column-Oriented Storage? In Contrast to Row-Oriented Storage, each column of data is stored in
+a seperate file, and all the column files store rows in the same order.</p>
+<h2 id="column-compression">Column Compression</h2>
+<p>Values in a column often look quite repetitive, so they can be compressed.</p>
+<h3 id="bitmap-encoding">Bitmap Encoding</h3>
+<p>we can take a column with n distinct values and turn it into n separate bitmaps: one bitmap for each distinct value, with one bit for each row. The bit is 1 if the row has that value, and 0 if not.</p>
+<h3 id="run-length-encoding">Run-length encoding</h3>
+<p>In run-length encoding, a sequence of &quot;0, 4, 12, 2&quot; stands for 0 zeros, 4 ones, 12 zeros, 2 ones.</p>
+<p>Using bitmap encoding, bitwise operation can be use to speed up queries.</p>
+<p>Column families are row-oriented: within each column family, they store all columns from a row
+together, along with a row key, and they do not use column compression.</p>
+<h2 id="memory-bandwitdth-and-vectorized-processing">Memory bandwitdth and vectorized processing</h2>
+<p>Column compression allows more rows from a column to fit in the same amount of L1 cache. Operators, such as bitwise AND and OR, can be designed to operate on such chunks of compressed column data directly.</p>
+<h2 id="sort-order-in-column-storage">Sort Order in Column Storage</h2>
+<p>We can choose to impose an order on rows, and use that as an indexing mechanism. A second column can determine the sort order of any rows that have the same value in the first column. Another advantage of sorted
+order is that it can help with compression of columns.</p>
+<h3 id="several-different-sort-orders">Several different sort orders</h3>
+<p>Different queries benefit from different sort orders, so why not store the same data sorted in several different ways? Data needs to be replicated to multiple machines anyway.</p>
+<h2 id="writing-to-column-oriented-storage">Writing to Column-Oriented Storage</h2>
+<p>Write data to an in-memory store first and then merge the in-memory store with the column files  on disk
+and written to new files in bulk.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

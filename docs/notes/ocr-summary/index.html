@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCR Summary</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>OCR Summary</h1>
+<h1 id="service-providers-libraries">Service Providers &amp; Libraries</h1>
+<h2 id="service-providers">Service Providers</h2>
+<ul>
+<li>Alibaba (Table Recognition &amp; Recognition based on custom templates)</li>
+<li>Google (Text Detection &amp;&amp; Document Text Detection, table recognition in alpha phase)</li>
+<li>Amazon: (Textract, with table recognition capability)</li>
+<li>[ABBYY]:</li>
+<li>Ocrolus</li>
+</ul>
+<h2 id="open-source-libraries">Open Source Libraries</h2>
+<ul>
+<li>tesseract</li>
+<li>gocr</li>
+<li>Apache Tika</li>
+<li>FreeOCR(based on tesseract engine)</li>
+</ul>
+<h1 id="compare-ocr-results">Compare OCR Results</h1>
+<ul>
+<li>Google(26)</li>
+<li>Amazon(63)</li>
+<li>Tesseract(73)</li>
+<li>Konvergen(74)</li>
+</ul>
+<h1 id="development-of-mlocr-service-choose-google-ocr-as-the-backend-service-provider">Development of MLOCR Service (choose google ocr as the backend service provider)</h1>
+<h2 id="endpoint">EndPoint</h2>
+<ul>
+<li>document</li>
+<li>bulk</li>
+<li>async post/get</li>
+</ul>
+<h2 id="process">Process</h2>
+<ol>
+<li>get file from client</li>
+<li>upload file to google cloud storage</li>
+<li>submit ocr task</li>
+<li>fetch results from google cloud storage</li>
+<li>convert to konvergen format</li>
+</ol>
+<h2 id="cicd">CICD</h2>
+<ol>
+<li>Dockerfile</li>
+<li>k8s</li>
+<li>Spinnaker</li>
+<li>Automate scripts</li>
+</ol>
+<h2 id="issues">Issues</h2>
+<ol>
+<li>Pod got killed when gunicorn is too busy to respond to health probe</li>
+<li>Process got killed when memory exceeded limit (if you can't find clue in application log, check dmseg)</li>
+<li>Asynronized worker is the best to choose</li>
+</ol>
+<h2 id="a-little-page-to-visualize-the-difference-between-ocr-results">A little page to visualize the difference between ocr results</h2>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>
