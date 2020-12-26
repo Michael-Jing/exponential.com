@@ -12,7 +12,7 @@ highlight_code = true
 build_search_index = true
 
 theme = "toucan"
+
 [extra]
-title = "Michael's Notes"
-description = "Michael is a learner and programmer, he likes swimming in his spare time"
-license = """"""
+title = "Michael's Notes & Blog"
+license = ""

@@ -1,5 +1,6 @@
 +++
 +++
+```
 U to undo the whole line
 ? to search backward
 Ctrl-o takes you back to older positions, ctrl-i to newer positions
@@ -12,3 +13,4 @@ A to insert text after the end of the line
 Ctrl-D to list possible completions of a command
 tab to complete
 
+```
