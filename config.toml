@@ -12,6 +12,8 @@ highlight_code = true
 build_search_index = true
 
 theme = "toucan"
+output_dir = "docs"
+output-dir = "docs"
 
 [extra]
 title = "Michael's Notes & Blog"
