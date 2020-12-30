@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tips on  Using Locks</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Tips on  Using Locks</h1>
+<p>The content of this note is from the book &quot;Seven Concurrency Models in Seven Weeks&quot;</p>
+<h2 id="do-not-use-an-object-s-hash-to-order-locks">Do Not Use an Object's Hash to Order Locks</h2>
+<p>One piece of advice you'll often see is to use an object's hash code to order lock
+acquisition, such as shown here:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashCode</span><span style="color:#c0c5ce;">(left) &lt; </span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashcode</span><span style="color:#c0c5ce;">(right)) {
+    first = left; second = right;
+} </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+    first = right; second = left;
+}
+</span></code></pre>
+<p>The issue is that when the two objects left and right have the same hascode, then the
+result of the ordering will be nonderministic.</p>
+<h2 id="do-not-use-alien-methods-while-honlding-a-lock">Do Not Use Alien Methods While Honlding A Lock</h2>
+<p>Large programs often make use of listeners to decouple modules. Here, for example, is a
+class that downloads from a URL and allows ProgressListeners to be registered:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Downloader </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">Thread </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">InputStream </span><span style="color:#eff1f5;">in;
+    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">OutputStream </span><span style="color:#eff1f5;">out;
+    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;">&gt; listeners;
+
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">Downloader</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">URL </span><span style="color:#bf616a;">url</span><span style="color:#eff1f5;">, </span><span style="color:#ebcb8b;">String </span><span style="color:#bf616a;">outputFilename</span><span style="color:#eff1f5;">) </span><span style="color:#b48ead;">throws </span><span style="color:#ebcb8b;">IOException </span><span style="color:#eff1f5;">{
+        in </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> url.</span><span style="color:#bf616a;">openConnection</span><span style="color:#eff1f5;">().</span><span style="color:#bf616a;">getInputStream</span><span style="color:#eff1f5;">();
+        out </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">FileOutputStream</span><span style="color:#eff1f5;">(outputFilename);
+        listeners </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;">&gt;();
+    }
+    </span><span style="color:#b48ead;">public synchronized void </span><span style="color:#8fa1b3;">addListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener </span><span style="color:#bf616a;">listener</span><span style="color:#eff1f5;">) {
+        listeners.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(listener);
+    }
+    </span><span style="color:#b48ead;">public synchronized void </span><span style="color:#8fa1b3;">removeListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener </span><span style="color:#bf616a;">listener</span><span style="color:#eff1f5;">) {
+        listeners.</span><span style="color:#bf616a;">remove</span><span style="color:#eff1f5;">(listener);
+    }
+    </span><span style="color:#b48ead;">private synchronized void </span><span style="color:#8fa1b3;">updateProgress</span><span style="color:#eff1f5;">(</span><span style="color:#b48ead;">int </span><span style="color:#bf616a;">n</span><span style="color:#eff1f5;">) {
+        </span><span style="color:#b48ead;">for </span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;"> listener</span><span style="color:#c0c5ce;">:</span><span style="color:#eff1f5;"> listeners)
+            listener.</span><span style="color:#bf616a;">onProgress</span><span style="color:#eff1f5;">(n);
+    }
+}
+
+</span></code></pre>
+<p>Because addListener(), removeListener(), and updateProgress() are all synchronized, multiple
+threads can can them without stepping on one another's toes. But a trap lurks in this code
+that could leak to deadlock enev though there's only a single lock in use.</p>
+<p>The problem is that updateProgress() calls an alien method - a method it knows nothing about.
+That method could do anything, including acquiring another lock. If it does, then we've
+acquired two locks without knowing whether we've done so in the right order. That can lead to
+deadlock.</p>
+<p>The only solution is to avoid calling alien methods while holding a lock. One way to achieve
+this is to make a defensive copy of listeners before iterating through it:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">private</span><span style="color:#c0c5ce;"> void </span><span style="color:#bf616a;">updateProgress</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> n) {
+    </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#c0c5ce;">&gt; listenersCopy;
+    </span><span style="color:#b48ead;">synchronized</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">) {
+        listenersCopy = listeners.</span><span style="color:#bf616a;">clone</span><span style="color:#c0c5ce;">();
+    }
+    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#c0c5ce;"> listener: listenersCopy)
+        listener.</span><span style="color:#bf616a;">onProgress</span><span style="color:#c0c5ce;">(n);
+}
+</span></code></pre>
+<p>This change kills several birds with one stone. Not only does it avoid calling an alien
+method with a lock held, it also minimizes the period during which we hold the lock. Holding
+locks for longer than necessary both hurts performance (by restricting the degree of achievable concurrency) and increases the dange of deadlock. This change also fixes another buy that
+isn't related to concurrency - a listener can now call removeListener() within its onProgress() method without modifying the copy of listeners that's mid-iteration.</p>
+<h2 id="takeaway-tips">Takeaway tips</h2>
+<ul>
+<li>Synchronize all access to shared variables.</li>
+<li>Both the writing and the reading threads need to use synchronization</li>
+<li>Acquire multile locks in a fixed, global order, and don't use hascode to determine the global order</li>
+<li>Don't call alien methods while holding a lock.</li>
+<li>Hold locks for the shortest possible amount time.</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

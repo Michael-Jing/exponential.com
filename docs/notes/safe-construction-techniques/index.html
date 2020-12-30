@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safe construction techniques</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Safe construction techniques</h1>
+<h2 id="don-t-publish-the-this-reference-during-construction">Don't publish the &quot;this&quot; reference during construction</h2>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">EventListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
+        </span><span style="color:#65737e;">// do our initialization
+        </span><span style="color:#eff1f5;">...
+        </span><span style="color:#65737e;">// register ourselves with the event source
+</span><span style="color:#eff1f5;">        eventSource.</span><span style="color:#bf616a;">registerListener</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+    }
+}
+</span></code></pre>
+<p>Even ignoring all the Java memory Model issues such as differences in visibility
+accross threads and memory access reording, this code still is in danger of
+exposing an incompletely constructed EventListener object to other threads.
+Consider what happens when EventListener is subclassed, as below:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">RecordingEventListener </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">EventListener </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">private final </span><span style="color:#ebcb8b;">ArrayList </span><span style="color:#eff1f5;">list;
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">RecordingEventListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
+        </span><span style="color:#bf616a;">super</span><span style="color:#eff1f5;">(eventSource);
+        list </span><span style="color:#c0c5ce;">= </span><span style="color:#ebcb8b;">Collections</span><span style="color:#eff1f5;">.</span><span style="color:#bf616a;">synchronizedList</span><span style="color:#eff1f5;">(</span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">());
+    }
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">onEvent</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Event </span><span style="color:#bf616a;">e</span><span style="color:#eff1f5;">) {
+        list.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(e);
+        </span><span style="color:#bf616a;">super</span><span style="color:#eff1f5;">.</span><span style="color:#bf616a;">onEvent</span><span style="color:#eff1f5;">(e);
+    }
+}
+</span></code></pre>
+<p>If the event source decides to send an event from within the registration call,
+or we just get unlucky and an event arrives at exactly the wrong moment,
+<code>RecordingEventListener.onEvent()</code> could get called while list still has
+the default value of null.</p>
+<h2 id="don-t-implicitly-expose-the-this-reference">Don't implicitly expose the &quot;this&quot; reference</h2>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener2 </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">EventListener2</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
+        eventSource.</span><span style="color:#bf616a;">registerListener</span><span style="color:#eff1f5;">(
+          </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">EventListener</span><span style="color:#eff1f5;">() {
+            </span><span style="color:#b48ead;">public void </span><span style="color:#8fa1b3;">onEvent</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Event </span><span style="color:#bf616a;">e</span><span style="color:#eff1f5;">) {
+                </span><span style="color:#bf616a;">eventReceived</span><span style="color:#eff1f5;">(e);
+              }
+          }
+        )
+      }
+      </span><span style="color:#b48ead;">public void </span><span style="color:#8fa1b3;">eventReceived</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Event </span><span style="color:#bf616a;">e</span><span style="color:#eff1f5;">) {}
+  }
+</span></code></pre>
+<p>Non-static inner classes maintain an implicit copy of the <code>this</code> reference of
+their parent object, so creating an anonymous inner class instance and passing it
+to an object visible from outside the current thread has all the same risks as
+exposing the <code>this</code> reference itself.</p>
+<h2 id="don-t-start-threads-from-within-constructors">Don't start threads from within constructors</h2>
+<p>Actually I'm get confusing on this, my question is that is what if we want to have
+an instance field that points to a class that start threads within constructors?
+or if the class provides a <code>start()</code> method, is it ok for us to call the
+<code>start()</code> method in our constructor. if the newly started threads need to
+access our object, then i think it not ok, since our object is not fully constructed
+yet.</p>
+<h2 id="what-does-publish-mean">What does &quot;publish&quot; mean?</h2>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Safe </span><span style="color:#eff1f5;">{
+
+  </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Object </span><span style="color:#eff1f5;">me;
+  </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Set </span><span style="color:#eff1f5;">set </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">HashSet</span><span style="color:#eff1f5;">();
+  </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Thread </span><span style="color:#eff1f5;">thread;
+
+  </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">Safe</span><span style="color:#eff1f5;">() {
+    </span><span style="color:#65737e;">// Safe because &quot;me&quot; is not visible from any other thread
+</span><span style="color:#eff1f5;">    me </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">;
+
+    </span><span style="color:#65737e;">// Safe because &quot;set&quot; is not visible from any other thread
+</span><span style="color:#eff1f5;">    set.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+
+    </span><span style="color:#65737e;">// Safe because MyThread won&#39;t start until construction is complete
+    // and the constructor doesn&#39;t publish the reference
+</span><span style="color:#eff1f5;">    thread </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">MyThread</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+  }
+
+  </span><span style="color:#b48ead;">public void </span><span style="color:#8fa1b3;">start</span><span style="color:#eff1f5;">() {
+    thread.</span><span style="color:#bf616a;">start</span><span style="color:#eff1f5;">();
+  }
+
+  </span><span style="color:#b48ead;">private class </span><span style="color:#ebcb8b;">MyThread</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Object </span><span style="color:#eff1f5;">o) {
+    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Object</span><span style="color:#eff1f5;"> theObject;
+
+    </span><span style="color:#b48ead;">public </span><span style="color:#bf616a;">MyThread</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Object</span><span style="color:#eff1f5;"> o) {
+      </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">.theObject </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> o;
+    }
+
+    ...
+  }
+}
+
+</span><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Unsafe </span><span style="color:#eff1f5;">{
+  </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Unsafe </span><span style="color:#eff1f5;">anInstance;
+  </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Set </span><span style="color:#eff1f5;">set </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">HashSet</span><span style="color:#eff1f5;">();
+  </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Set </span><span style="color:#eff1f5;">mySet </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">HashSet</span><span style="color:#eff1f5;">();
+
+  </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">Unsafe</span><span style="color:#eff1f5;">() {
+    </span><span style="color:#65737e;">// Unsafe because anInstance is globally visible
+</span><span style="color:#eff1f5;">    anInstance </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">;
+
+    </span><span style="color:#65737e;">// Unsafe because SomeOtherClass.anInstance is globally visible
+    </span><span style="color:#ebcb8b;">SomeOtherClass</span><span style="color:#eff1f5;">.anInstance </span><span style="color:#c0c5ce;">= </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">;
+
+    </span><span style="color:#65737e;">// Unsafe because SomeOtherClass might save the &quot;this&quot; reference
+    // where another thread could see it
+    </span><span style="color:#ebcb8b;">SomeOtherClass</span><span style="color:#eff1f5;">.</span><span style="color:#bf616a;">registerObject</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+
+    </span><span style="color:#65737e;">// Unsafe because set is globally visible
+</span><span style="color:#eff1f5;">    set.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+
+    </span><span style="color:#65737e;">// Unsafe because we are publishing a reference to mySet
+</span><span style="color:#eff1f5;">    mySet.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+    </span><span style="color:#ebcb8b;">SomeOtherClass</span><span style="color:#eff1f5;">.</span><span style="color:#bf616a;">someMethod</span><span style="color:#eff1f5;">(mySet);
+
+    </span><span style="color:#65737e;">// Unsafe because the &quot;this&quot; object will be visible from the new
+    // thread before the constructor completes
+</span><span style="color:#eff1f5;">    thread </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">MyThread</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+    thread.</span><span style="color:#bf616a;">start</span><span style="color:#eff1f5;">();
+  }
+
+  </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">Unsafe</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">Collection </span><span style="color:#bf616a;">c</span><span style="color:#eff1f5;">) {
+    </span><span style="color:#65737e;">// Unsafe because &quot;c&quot; may be visible from other threads
+</span><span style="color:#eff1f5;">    c.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">);
+  }
+}
+</span></code></pre><h2 id="conclusion">Conclusion</h2>
+<p>Try to avoid using this, Try to avoid creating instances of inner classes or
+starting threads from constructors. If you cannot avoid using this, be very
+sure that you are not making the <code>this</code> reference visible to other threads.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

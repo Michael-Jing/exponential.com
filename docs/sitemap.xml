@@ -14,6 +14,10 @@
         <lastmod>2020-07-03T20:22:00</lastmod>
     </url>
     <url>
+        <loc>https://randominit.xyz/notes/correct-double-locking-pattern/</loc>
+        <lastmod>2020-12-29</lastmod>
+    </url>
+    <url>
         <loc>https://randominit.xyz/notes/cpp/</loc>
     </url>
     <url>
@@ -29,6 +33,10 @@
     <url>
         <loc>https://randominit.xyz/notes/home-directoy-is-full/</loc>
         <lastmod>2019-12-10T12:07:00</lastmod>
+    </url>
+    <url>
+        <loc>https://randominit.xyz/notes/java-memory-model/</loc>
+        <lastmod>2020-12-29</lastmod>
     </url>
     <url>
         <loc>https://randominit.xyz/notes/leader-based-replication/</loc>
@@ -68,6 +76,10 @@
         <loc>https://randominit.xyz/notes/ros/</loc>
     </url>
     <url>
+        <loc>https://randominit.xyz/notes/safe-construction-techniques/</loc>
+        <lastmod>2020-12-29</lastmod>
+    </url>
+    <url>
         <loc>https://randominit.xyz/notes/scylladb/</loc>
     </url>
     <url>
@@ -83,6 +95,10 @@
     <url>
         <loc>https://randominit.xyz/notes/tablebank/</loc>
         <lastmod>2019-12-05</lastmod>
+    </url>
+    <url>
+        <loc>https://randominit.xyz/notes/things-to-avoid-when-using-locks/</loc>
+        <lastmod>2020-12-29T10:00:00</lastmod>
     </url>
     <url>
         <loc>https://randominit.xyz/notes/tips/</loc>

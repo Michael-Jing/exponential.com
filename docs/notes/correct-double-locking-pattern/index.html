@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Correct Way to Do Double Locking</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Correct Way to Do Double Locking</h1>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">private volatile </span><span style="color:#ebcb8b;">Helper </span><span style="color:#eff1f5;">helper </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">;
+    </span><span style="color:#b48ead;">public </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
+        </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;"> result </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helper;
+        </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(result </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
+            </span><span style="color:#b48ead;">synchronized</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">) {
+                result </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helper;
+                </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(result </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
+                    helper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> result </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">();
+                }
+            }
+        }
+        </span><span style="color:#b48ead;">return</span><span style="color:#eff1f5;"> result;
+    }
+
+    </span><span style="color:#65737e;">// other functions and members...
+</span><span style="color:#eff1f5;">}
+</span></code></pre>
+<p>Another way that works</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#bf616a;">T</span><span style="color:#eff1f5;">&gt; {
+    </span><span style="color:#b48ead;">public final </span><span style="color:#ebcb8b;">T </span><span style="color:#eff1f5;">value;
+    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">FinalWrapper</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">T </span><span style="color:#bf616a;">value</span><span style="color:#eff1f5;">) {
+        </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">.value </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> value;
+    }
+}
+
+</span><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
+   </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt; helperWrapper </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">;
+
+   </span><span style="color:#b48ead;">public </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
+      </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt; wrapper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helperWrapper;
+
+      </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(wrapper </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
+          </span><span style="color:#b48ead;">synchronized</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">) {
+              </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(helperWrapper </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
+                  helperWrapper </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt;(</span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">());
+              }
+              wrapper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helperWrapper;
+          }
+      }
+      </span><span style="color:#b48ead;">return</span><span style="color:#eff1f5;"> wrapper.value;
+   }
+}
+</span></code></pre>
+<p>if the wanted object is static, then lazy initialization pattern could be used</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">ThreadSafe
+</span><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">private static class </span><span style="color:#ebcb8b;">HelperHolder </span><span style="color:#eff1f5;">{
+       </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Helper </span><span style="color:#eff1f5;">helper </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">();
+    }
+
+    </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
+        </span><span style="color:#b48ead;">return </span><span style="color:#ebcb8b;">HelperHolder</span><span style="color:#eff1f5;">.helper;
+    }
+}
+</span></code></pre>
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

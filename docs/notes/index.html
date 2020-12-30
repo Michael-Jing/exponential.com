@@ -26,9 +26,109 @@
   
   
   <section class="card preview">
+      <div class="date">2020-12-29T10:00:00</div>
+      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;things-to-avoid-when-using-locks&#x2F;">Tips on  Using Locks</a></h1>
+      <div>The content of this note is from the book &amp;quot;Seven Concurrency Models in Seven Weeks&amp;quot;
+Do Not Use an Object&#x27;s Hash to Order Locks
+One piece of advice you&#x27;ll often see is to use an object&#x27;s hash code to order lock
+acquisition, such as shown here:
+
+if (System.identityHashCode(left) &amp;lt; System.identityHashcode(right)) {
+    first = left; second = right;
+} else {
+    first = right; second = left;
+}
+
+The issue is that when the two objects left and right have the same hascode, then the
+result of the ordering will be nonderministic.
+Do Not Use Alien Methods While Honlding A Lock
+Large programs often make use of listeners to decouple modules. Here, for example, is a
+class that downloads from a URL and allows ProgressListeners to be registered:
+
+class Downloader extends Thread {
+    private InputStream in;
+    private OutputStream out;
+    private ArrayList&amp;lt;ProgressListener&amp;gt; listeners;
+
+    public Downloader(URL url, String outputFilename) throws IOException {
+        in = url.ope…</div> 
+  </section>
+  
+
+
+
+
+<section class="card feed">
+  
+
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;correct-double-locking-pattern&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-29</div>
+      <h3>Correct Way to Do Double Locking</h3>
+      <p>
+        
+          
+class Foo {
+    private volatile Helper helper = null;
+    public Helper getHelper() {
+        Helper result = helper;
+        if (result == null) {
+            synchronized(this) {
+                result = helper;
+                if (result == null) {
+                    helper = result = new Help… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;java-memory-model&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-29</div>
+      <h3>Java Memory Model</h3>
+      <p>
+        
+          How do final fields work under the new JMM?
+Assuming the object is constructed &amp;quot;correctly&amp;quot;, once an object is constructed, the
+values assigned to the final fields in the constructor will be visible to all
+other threads without synchronization. In addition, the visible values for any
+other … 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;safe-construction-techniques&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-29</div>
+      <h3>Safe construction techniques</h3>
+      <p>
+        
+          Don&#x27;t publish the &amp;quot;this&amp;quot; reference during construction
+
+public class EventListener {
+    public EventListener(EventSource eventSource) {
+        &#x2F;&#x2F; do our initialization
+        ...
+        &#x2F;&#x2F; register ourselves with the event source
+        eventSource.registerListener(this);
+    }
+}
+
+Eve… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;high-performance-python&#x2F;" class="feed-link">
+    <div>
       <div class="date">2020-08-10T14:53:00</div>
-      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;high-performance-python&#x2F;">High Performance Python</a></h1>
-      <div>High Performance Python
+      <h3>High Performance Python</h3>
+      <p>
+        
+          High Performance Python
 Benchmarking &amp;amp; Profiling
 Test &amp;amp; Benchmarking
 
@@ -48,113 +148,11 @@ Threads Synchronization
 Synchronization primitives
 
 join
-Lock
-RLcok
-
-谁拿谁放
-同一线程多次拿到
-拿多少次放多少次
-
-
-condition
-semaphores
-Events
-barrier
-
-Concurrent DS
-Thread-safe in Python
-
-queue
-
-Queue
-LifoQueue
-PriorityQueue
-
-
-Deque
-
-Not Thread-safe in Python
-
-Set
-List
-
-Make Non Thread-safe Thread-safe
-
-Extend
-decorator for method
-decorator for class
-
-Executors &amp;amp; Pools
-Based on
-
-Threads
-Process
-
-Apis
-
-for test
-
-set_exception
-set_result
-set_running_notify_cancel
-
-
-shutdown
-
-executor.shutdown
-
-
-future objects apis
-
-query
-
-running
-done
-result
-exception
-as_completed
-
-
-control
-
-add_done_callback
-cancel
-
-
-
-
-
-Processes
-Create
-
-multiprocessing.Process
-Inherit class Process
-
-Apis
-
-name
-daemon
-terminate
-
-Synchronization
-
-Lock
-Rlock
-Condition
-Semaphore
-Event
-Barrier
-
-Communic…</div> 
-  </section>
-  
-
-
-
-
-<section class="card feed">
-  
-
+Lo… 
+        
+      </p>
+    </div>
+  </a>
 
   <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;python-threads&#x2F;" class="feed-link">
     <div>
@@ -212,7 +210,7 @@ threading.enume…
   <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;partitioning&#x2F;" class="feed-link">
     <div>
       <div class="date">2020-08-09</div>
-      <h3></h3>
+      <h3>Partitioning</h3>
       <p>
         
           

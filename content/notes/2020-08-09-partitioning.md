@@ -1,4 +1,6 @@
 +++
+title = "Partitioning"
+date = 2020-08-09
 +++
 <!DOCTYPE html>
 <html>

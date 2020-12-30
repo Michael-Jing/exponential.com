@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Memory Model</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Java Memory Model</h1>
+<h2 id="how-do-final-fields-work-under-the-new-jmm">How do final fields work under the new JMM?</h2>
+<p>Assuming the object is constructed &quot;correctly&quot;, once an object is constructed, the
+values assigned to the final fields in the constructor will be visible to all
+other threads without synchronization. In addition, the visible values for any
+other object or array referenced by those final fields will be at least as up-to-date
+as the final fields.</p>
+<p>what does it mean for an object to be properly constructed? It simply means that
+no reference to the object being constructed is allowed to &quot;escape&quot; during construction.</p>
+<p>You can have a final pointer to an array and not have to worry about other therads
+seeing the correct values for the array reference, but incorrect values for the
+contents of the array. Again, by &quot;correct&quot; here, we mean &quot;up to date as of the end
+of the object's constructor&quot;, not &quot;the latest value available&quot;.</p>
+<h2 id="what-does-volatile-do">What does volatile do?</h2>
+<p>Under the new memory model, it is still true that volatile variables cannot be reordered
+with each other. In addition, it is now no longer so easy to reorder normal field
+accesses around them. Writing to a volatile field has the same memory effect
+as a monitor release, and reading from a volatile field has the same memory
+effect as a monitor acquire. In effect, because the new memory model places
+stricter constraints on reordering of volatile field accesses, volatile or not,
+anything that was visible to thread A when it writes to volatile field f becomes
+visible to thread B when it reads f.</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">VolatileExample </span><span style="color:#eff1f5;">{
+    </span><span style="color:#b48ead;">int </span><span style="color:#eff1f5;">x </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">0</span><span style="color:#eff1f5;">;
+    </span><span style="color:#b48ead;">volatile boolean </span><span style="color:#eff1f5;">v </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">false</span><span style="color:#eff1f5;">;
+    </span><span style="color:#b48ead;">public void </span><span style="color:#8fa1b3;">writer</span><span style="color:#eff1f5;">() {
+        x </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">42</span><span style="color:#eff1f5;">;
+        v </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">true</span><span style="color:#eff1f5;">;
+    }
+    </span><span style="color:#b48ead;">public void </span><span style="color:#8fa1b3;">reader</span><span style="color:#eff1f5;">() {
+        </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(v </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">true</span><span style="color:#eff1f5;">) {
+            </span><span style="color:#65737e;">// uses x - guaranteed to see 42, even though x is not volatile
+            // because anything that was visible to thread A when it writes
+            // to volatile field v becomes visible to thread B when it reads v
+        </span><span style="color:#eff1f5;">}
+    }
+}
+
+</span></code></pre>
+<p><strong>Important Note:</strong> Note that it is important for both threads to access
+the same volatile variable in order to properly set up the happens-before relationship. It is not the case that everything visible to thread A when it writes to volatile
+field f becomes visible to thread B after it reads volatile field g.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>
