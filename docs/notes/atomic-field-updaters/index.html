@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atomic field updaters</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Atomic field updaters</h1>
+<p><strong>Field updaters</strong> are essentially used as &quot;wrappers&quot; around a volatile field
+(primitive or object reference). They are generally used when one or both of the following are true:</p>
+<ul>
+<li>You generally want to refer to the variable &quot;normally&quot; (that is, without having to always refer to it via the get or set methods on the atomic classes) but occasionally need an atomic  get-set operation (which you can't do with a normal volatile field);</li>
+<li>You are going to create a large number of objects of the given type, and don't want every single instance to have to have an extra object embeded in it just for atomic access.</li>
+</ul>
+<p>An example of the first kind is BufferedInputStream. Every instance of BufferedInputStream
+contains an internal buffer, defined as a volatile byte array. Generally speaking, BufferedInputStream just
+needs to refer this array &quot;normally&quot; for the purpose of reading/writing bytes. However, an atomic
+get-and-set operation is needed in specific places where the buffer array is replaced (either to
+grow it or to mark it as null or closed), because closure can occur in a different thread to that
+performing the reads. One option would have been to declare the buffer variable as a AtomicReference to an array, and always get and set the array via this variable. But that would be a bit
+messy. Instead, a normal volatile array variable is used, and the class also contains a static
+AtomicReferenceUpdater as follows:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">static </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">, bytes[]&gt;
+    bufUpdater = </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">newUpdater</span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">,
+    </span><span style="color:#b48ead;">byte[]</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">, &quot;</span><span style="color:#a3be8c;">buf</span><span style="color:#c0c5ce;">&quot;);
+</span></code></pre>
+<p>The array itself still remains a normal (volatile) variable, and reads and writes from the array
+can use normal array syntax. But when necessary, via the field updater, an atomic comparae-and-set
+operation can be performed on the volatile variable. Although the update is static, each instance
+of BufferedInputStream has its own buffer of course. So when we perform the CAS operation, we
+need to pass into the updater the actual object whose variable we want to affect:</p>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(bufUpdater.</span><span style="color:#bf616a;">compareAndSet</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">, oldbuffer, newBuffer)) {
+  ...
+}
+</span></code></pre>
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

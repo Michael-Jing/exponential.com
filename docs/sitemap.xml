@@ -10,6 +10,10 @@
         <loc>https://randominit.xyz/notes/898-bitwise-ors-of-subarrays/</loc>
     </url>
     <url>
+        <loc>https://randominit.xyz/notes/atomic-field-updaters/</loc>
+        <lastmod>2020-12-30</lastmod>
+    </url>
+    <url>
         <loc>https://randominit.xyz/notes/column-oriented-storage/</loc>
         <lastmod>2020-07-03T20:22:00</lastmod>
     </url>
@@ -71,6 +75,10 @@
     <url>
         <loc>https://randominit.xyz/notes/python-threads/</loc>
         <lastmod>2020-08-09T20:31:00</lastmod>
+    </url>
+    <url>
+        <loc>https://randominit.xyz/notes/reentrantlock/</loc>
+        <lastmod>2020-12-30</lastmod>
     </url>
     <url>
         <loc>https://randominit.xyz/notes/ros/</loc>

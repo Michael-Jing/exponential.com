@@ -26,32 +26,18 @@
   
   
   <section class="card preview">
-      <div class="date">2020-12-29T10:00:00</div>
-      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;things-to-avoid-when-using-locks&#x2F;">Tips on  Using Locks</a></h1>
-      <div>The content of this note is from the book &amp;quot;Seven Concurrency Models in Seven Weeks&amp;quot;
-Do Not Use an Object&#x27;s Hash to Order Locks
-One piece of advice you&#x27;ll often see is to use an object&#x27;s hash code to order lock
-acquisition, such as shown here:
+      <div class="date">2020-12-30</div>
+      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;atomic-field-updaters&#x2F;">Atomic field updaters</a></h1>
+      <div>Field updaters are essentially used as &amp;quot;wrappers&amp;quot; around a volatile field
+(primitive or object reference). They are generally used when one or both of the following are true:
 
-if (System.identityHashCode(left) &amp;lt; System.identityHashcode(right)) {
-    first = left; second = right;
-} else {
-    first = right; second = left;
-}
+You generally want to refer to the variable &amp;quot;normally&amp;quot; (that is, without having to always refer to it via the get or set methods on the atomic classes) but occasionally need an atomic  get-set operation (which you can&#x27;t do with a normal volatile field);
+You are going to create a large number of objects of the given type, and don&#x27;t want every single instance to have to have an extra object embeded in it just for atomic access.
 
-The issue is that when the two objects left and right have the same hascode, then the
-result of the ordering will be nonderministic.
-Do Not Use Alien Methods While Honlding A Lock
-Large programs often make use of listeners to decouple modules. Here, for example, is a
-class that downloads from a URL and allows ProgressListeners to be registered:
-
-class Downloader extends Thread {
-    private InputStream in;
-    private OutputStream out;
-    private ArrayList&amp;lt;ProgressListener&amp;gt; listeners;
-
-    public Downloader(URL url, String outputFilename) throws IOException {
-        in = url.ope…</div> 
+An example of the first kind is BufferedInputStream. Every instance of BufferedInputStream
+contains an internal buffer, defined as a volatile byte array. Generally speaking, BufferedInputStream just
+needs to refer this array &amp;quot;normally&amp;quot; for the purpose of reading&#x2F;writing bytes. However, an atomic
+get-and-set operation is needed in specific places where the buffe…</div> 
   </section>
   
 
@@ -61,6 +47,40 @@ class Downloader extends Thread {
 <section class="card feed">
   
 
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;reentrantlock&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-30</div>
+      <h3>ReentrantLock in Java</h3>
+      <p>
+        
+          The advantage if ReentrantLock over intrinsic Lock
+
+The thread waiting to acquire a lock can be interrupted if lockInterruptibly() is used
+A timeout can be set by using tryLock()
+Hand-over-Hand Locking is possible which enables efficient concurrent access on data structures like linked list
+Conditio… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;things-to-avoid-when-using-locks&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-29T10:00:00</div>
+      <h3>Tips on  Using Locks</h3>
+      <p>
+        
+          The content of this note is from the book &amp;quot;Seven Concurrency Models in Seven Weeks&amp;quot;
+Do Not Use an Object&#x27;s Hash to Order Locks
+One piece of advice you&#x27;ll often see is to use an object&#x27;s hash code to order lock
+acquisition, such as shown here:
+
+if (System.identityHashCode(left) &amp;lt; System.… 
+        
+      </p>
+    </div>
+  </a>
 
   <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;correct-double-locking-pattern&#x2F;" class="feed-link">
     <div>

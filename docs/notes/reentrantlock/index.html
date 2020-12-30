@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReentrantLock in Java</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>ReentrantLock in Java</h1>
+<h2 id="the-advantage-if-reentrantlock-over-intrinsic-lock">The advantage if ReentrantLock over intrinsic Lock</h2>
+<ul>
+<li>The thread waiting to acquire a lock can be interrupted if <code>lockInterruptibly()</code> is used</li>
+<li>A timeout can be set by using <code>tryLock()</code></li>
+<li>Hand-over-Hand Locking is possible which enables efficient concurrent access on data structures like linked list</li>
+<li>Conditional variables is introduced
+pattern to use conditional variables</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code><span style="color:#ebcb8b;">ReentrantLock</span><span style="color:#c0c5ce;"> lock = </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">ReentrantLock</span><span style="color:#c0c5ce;">();
+</span><span style="color:#ebcb8b;">Condition</span><span style="color:#c0c5ce;"> condition = lock.</span><span style="color:#bf616a;">newCondition</span><span style="color:#c0c5ce;">();
+</span><span style="color:#c0c5ce;">lock.</span><span style="color:#bf616a;">lock</span><span style="color:#c0c5ce;">();
+</span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
+</span><span style="color:#c0c5ce;">   </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(!&lt;&lt;condition is </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">&gt;&gt;)
+</span><span style="color:#c0c5ce;">       condition.</span><span style="color:#bf616a;">await</span><span style="color:#c0c5ce;">();
+</span><span style="color:#c0c5ce;">   « use shared resource&gt;&gt;
+</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">finally </span><span style="color:#c0c5ce;">{lock.</span><span style="color:#bf616a;">unlock</span><span style="color:#c0c5ce;">(); }
+</span></code></pre>
+<p>A thread must hold the associated lock before being able to wait on the condition. if the condition is not true, it calls <code>await()</code>
+, which atomically unlocks the lock and blocks on the condition variable.</p>
+<p>When another thread calls <code>singal()</code> or <code>singnalAll()</code> to indicate that
+the condition might now be true, <code>await()</code> unblocks and automatically
+reacquires the lock. An important point is that when <code>await()</code> returns,
+it only indicates that the condition might be true. so we need to go back and
+recheck whether the condition is true.</p>
+<p>From my understanding, the advantage of condition is that we can use <code>signal()</code> and <code>await()</code> to get some coordination between threads, instead of trying
+to acquire the lock blindly.</p>
+<p>How can we solve the Dining Philosoper problem using condition? In order to eat,
+a philosoper need to have his left chopstick and his right chopstick available,
+so intuitively, we might want to associate a condition with each of the chopstick,
+and a philosoper can wait on the condition associated with the chopsitck on
+his left and the chopsitck on his right in order to eat. But, the issue is,
+waiting on two conditions is messy. So, instead, we associate a condition
+with each of the philosoper, and the condition only means the philosoper may
+go ahead to try to eat, but it's not guaranteed that both of the chopsticks
+are available. When a philosoper finishes eating, he needs to singal both the
+philosoper on his left and the philosoper on his right. In order to eat, a
+philosoper needs to make sure that both pholosopers on his left and his right
+is not eating.</p>
+<h2 id="fairness">Fairness</h2>
+<p>If fairness parameter is set to true, under contention, locks favor granting access to the
+longest-waiting thread. Otherwise this lock does not guarantee any particular acces order.
+Programs using fair locks accessed by many threads may display lower overall throughput (i.e., are slower; often much slower) than those using the default setting. Note however, that fairness
+of locks does not guarantee fairness of thread scheduling. Thus, one of many threads using
+a fair lock may obtain it multiple times in succession while other active threads are not
+progressing and not currently holding the lock. Also note that the untimed <code>tryLock</code> method
+does not honor the fairness setting.</p>
+<h2 id="spurious-wakeup">Spurious wakeup</h2>
+<p>A <strong>spurious wakeup</strong> happens when a thread wakes up from waiting on a condition
+variable that's been signaled, only to discover that the condition it was waiting for isn't
+satisfied.</p>
+<p>Because spurious wakeups can happen whenever there's a race and possibly even in the absence of
+a race or a signal, when a thread wakes on a condition variable, it should always check that
+the condition it sought is satisfied.</p>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>
