@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rust Async Notes</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Rust Async Notes</h1>
+<p><strong>Due to the nature of notes, the content of this notes would be ustructured</strong></p>
+<h2 id="await-ing-on-a-multithreaded-executor">.await ing on a Multithreaded Executor <br></h2>
+<p><code>Future</code> may move between threads, so any variables used in <code>async</code>
+bodies must be able to travel between threads. So it is not safe to use <code>Rc</code>, <code>RefCell</code> or any other types that don't implement the <code>Send</code>
+trait, (it is possible to use these types so long as they aren't in scope
+during a call to <code>.await</code>.). Similarly, it isn't a good idea to hold a
+traditional non-futures-aware lock across an <code>.await</code>, as it can cause
+the threadpool to lock up: one task could take out a lock, <code>.await</code> and yield to the executor, allowing another task to attempt to take the lock and
+cause a deadlock. To avoid this, use the <code>Mutex</code> in <code>futures::lock</code></p>
+<h2 id="pin">Pin</h2>
+<ol>
+<li>
+<p>For pinned data, you have to maitain the <code>invariant</code> that its memory will not get
+invalidated or repurposed from the moment it gets pinned until when drop is called.
+so the question here is if I moved the pinned data, what can I expect? a compile error or a
+runtime error or undefined behavior? how can I do an experiment on this</p>
+</li>
+<li>
+<p>Pinning a <code>!Unpin</code> object to the stack requires <code>unsafe</code>, why?</p>
+</li>
+<li>
+<p>Getting a <code>&amp;mut T</code> to a pinned T requires unsafe if <code>T: !Unpin</code>.</p>
+</li>
+<li>
+<p>If <code>T: Unpin</code> (which is the default), then <code>Pin&lt;'a, T&gt;</code> is entirely equivalent to
+<code>&amp;'a mut T</code>. In other words: <code>Unpin</code> means it's OK for this type to be moved even when
+pinned, so <code>Pin</code> will have no effect on such a type .</p>
+</li>
+</ol>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

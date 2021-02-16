@@ -84,6 +84,14 @@
         <loc>https://randominit.xyz/notes/ros/</loc>
     </url>
     <url>
+        <loc>https://randominit.xyz/notes/rust-async-notes/</loc>
+        <lastmod>2021-01-12</lastmod>
+    </url>
+    <url>
+        <loc>https://randominit.xyz/notes/rust-union-find/</loc>
+        <lastmod>2021-02-02</lastmod>
+    </url>
+    <url>
         <loc>https://randominit.xyz/notes/safe-construction-techniques/</loc>
         <lastmod>2020-12-29</lastmod>
     </url>
@@ -96,6 +104,10 @@
     <url>
         <loc>https://randominit.xyz/notes/sstables-and-lsm-trees/</loc>
         <lastmod>2020-07-02T17:54:00</lastmod>
+    </url>
+    <url>
+        <loc>https://randominit.xyz/notes/store-aws-iot-device-shadow-data-to-dynamo/</loc>
+        <lastmod>2021-02-02</lastmod>
     </url>
     <url>
         <loc>https://randominit.xyz/notes/sys-design/</loc>

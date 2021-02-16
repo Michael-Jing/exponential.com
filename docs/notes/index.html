@@ -26,18 +26,31 @@
   
   
   <section class="card preview">
-      <div class="date">2020-12-30</div>
-      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;atomic-field-updaters&#x2F;">Atomic field updaters</a></h1>
-      <div>Field updaters are essentially used as &amp;quot;wrappers&amp;quot; around a volatile field
-(primitive or object reference). They are generally used when one or both of the following are true:
-
-You generally want to refer to the variable &amp;quot;normally&amp;quot; (that is, without having to always refer to it via the get or set methods on the atomic classes) but occasionally need an atomic  get-set operation (which you can&#x27;t do with a normal volatile field);
-You are going to create a large number of objects of the given type, and don&#x27;t want every single instance to have to have an extra object embeded in it just for atomic access.
-
-An example of the first kind is BufferedInputStream. Every instance of BufferedInputStream
-contains an internal buffer, defined as a volatile byte array. Generally speaking, BufferedInputStream just
-needs to refer this array &amp;quot;normally&amp;quot; for the purpose of reading&#x2F;writing bytes. However, an atomic
-get-and-set operation is needed in specific places where the buffe…</div> 
+      <div class="date">2021-02-02</div>
+      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;rust-union-find&#x2F;">Basic Union Find in Rust</a></h1>
+      <div>
+   fn find(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize) -&amp;gt; usize {
+        if g[i] != i {
+            g[i] = Self::find(g, g[i]);
+            g[i]
+        } else {
+            i 
+        }
+    }
+    fn union_fn(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, s: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize, j: usize) {
+        let i = Self::find(g, i);
+        let j = Self::find(g, j);
+        if i != j {
+            if s[j] &amp;gt; s[i] {
+                g[i] = j;
+                s[j] += s[i];
+            } else {
+                g[j] = i;
+                s[i] += s[j];
+            }
+        }
+    }
+</div> 
   </section>
   
 
@@ -47,6 +60,50 @@ get-and-set operation is needed in specific places where the buffe…</div>
 <section class="card feed">
   
 
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;store-aws-iot-device-shadow-data-to-dynamo&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2021-02-02</div>
+      <h3>Get Data From AWS IoT Device Shadow and Store In Dynamodb</h3>
+      <p>
+        
+          We need to implement an IoT platform on AWS, and we will be using device shadows to communicate between device
+and other parts such as Apps. One requirement for the plotform is that we need to access historic data.
+My plan is that I&#x27;m going to create a Rule that reads from device shadows and store d… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;rust-async-notes&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2021-01-12</div>
+      <h3>Rust Async Notes</h3>
+      <p>
+        
+          Due to the nature of notes, the content of this notes would be ustructured
+.await ing on a Multithreaded Executor 
+Future may move between threads, so any variables used in async
+bodies must be able to travel between threads. So it is not safe to use Rc, RefCell or any other types that don&#x27;t impleme… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;atomic-field-updaters&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2020-12-30</div>
+      <h3>Atomic field updaters</h3>
+      <p>
+        
+          Field updaters are essentially used as &amp;quot;wrappers&amp;quot; around a volatile field
+(primitive or object reference). They are generally used when one or both of the following are true:
+
+You generally want to refer to the variable &amp;quot;normally&amp;quot; (that is, without having to always refer to it vi… 
+        
+      </p>
+    </div>
+  </a>
 
   <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;reentrantlock&#x2F;" class="feed-link">
     <div>
