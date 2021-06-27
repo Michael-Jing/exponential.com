@@ -25,7 +25,7 @@
 <h1>Safe construction techniques</h1>
 <h2 id="don-t-publish-the-this-reference-during-construction">Don't publish the &quot;this&quot; reference during construction</h2>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener </span><span style="color:#eff1f5;">{
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener </span><span style="color:#eff1f5;">{
     </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">EventListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
         </span><span style="color:#65737e;">// do our initialization
         </span><span style="color:#eff1f5;">...
@@ -39,7 +39,7 @@ accross threads and memory access reording, this code still is in danger of
 exposing an incompletely constructed EventListener object to other threads.
 Consider what happens when EventListener is subclassed, as below:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">RecordingEventListener </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">EventListener </span><span style="color:#eff1f5;">{
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">RecordingEventListener </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">EventListener </span><span style="color:#eff1f5;">{
     </span><span style="color:#b48ead;">private final </span><span style="color:#ebcb8b;">ArrayList </span><span style="color:#eff1f5;">list;
     </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">RecordingEventListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
         </span><span style="color:#bf616a;">super</span><span style="color:#eff1f5;">(eventSource);
@@ -57,7 +57,7 @@ or we just get unlucky and an event arrives at exactly the wrong moment,
 the default value of null.</p>
 <h2 id="don-t-implicitly-expose-the-this-reference">Don't implicitly expose the &quot;this&quot; reference</h2>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener2 </span><span style="color:#eff1f5;">{
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">EventListener2 </span><span style="color:#eff1f5;">{
     </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">EventListener2</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">EventSource </span><span style="color:#bf616a;">eventSource</span><span style="color:#eff1f5;">) {
         eventSource.</span><span style="color:#bf616a;">registerListener</span><span style="color:#eff1f5;">(
           </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">EventListener</span><span style="color:#eff1f5;">() {
@@ -83,7 +83,7 @@ access our object, then i think it not ok, since our object is not fully constru
 yet.</p>
 <h2 id="what-does-publish-mean">What does &quot;publish&quot; mean?</h2>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Safe </span><span style="color:#eff1f5;">{
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Safe </span><span style="color:#eff1f5;">{
 
   </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Object </span><span style="color:#eff1f5;">me;
   </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">Set </span><span style="color:#eff1f5;">set </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">HashSet</span><span style="color:#eff1f5;">();

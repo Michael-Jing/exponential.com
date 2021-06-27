@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transactions</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Transactions</h1>
+<p>Transactions</p>
+<h1 id="acid">ACID</h1>
+<h2 id="atomicity">Atomicity</h2>
+<ul>
+<li>Abortability, implemented using write ahead log</li>
+</ul>
+<h2 id="consistency">Consistency</h2>
+<ul>
+<li>Satisfy application defined invariant</li>
+</ul>
+<h2 id="isolation">Isolation</h2>
+<ul>
+<li>Different isolation levels</li>
+</ul>
+<h2 id="durability">Durability</h2>
+<h1 id="atomic-operations-on-single-object">Atomic operations on single object</h1>
+<ul>
+<li>compare and set</li>
+<li>atomic increment</li>
+</ul>
+<h1 id="isolation-levels">Isolation Levels</h1>
+<h2 id="read-committed">Read committed</h2>
+<h3 id="properties">Properties</h3>
+<ul>
+<li>no dirty reads (only read commited result)</li>
+<li>no dirty writes (only override previously commited record)
+<ul>
+<li>issues if dirty writes (Bob buy car but invoice sent to alice)</li>
+</ul>
+</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<ul>
+<li>use locks to prevent concurrent writes</li>
+<li>keep old value during writes, and return old value if there's a request</li>
+</ul>
+<h2 id="snapshot-isolation-repeatable-read">Snapshot Isolation &amp; Repeatable Read</h2>
+<h3 id="properties-1">Properties</h3>
+<h3 id="implementation-1">Implementation</h3>
+<ul>
+<li>MVCC
+<ul>
+<li>unique monotonically increasing transaction id</li>
+<li>visibility rule
+<ul>
+<li>At the time when the reader's transaction started, the transaction that created the object had already committed.</li>
+<li>The object is not marked for deletion, or if it is, the transaction that requested deletion had not yet committed at the time when the reader's transaction started.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="indexes-and-snapshot-isolation">Indexes and snapshot isolation</h3>
+<ul>
+<li>index points to all versions of an object</li>
+<li>append-only/copy-on-write</li>
+<li>every write transaction (or batch of transactions) creates a new B-tree root, and a particular root is a consistent snapshot of the database at the point in time when it was created.</li>
+</ul>
+<h2 id="serializability">Serializability</h2>
+<h3 id="how-to-implement">How to implement</h3>
+<ul>
+<li>
+<p>Literally exectute transactions in a serial order</p>
+<ul>
+<li>every transaction must be small and fast</li>
+<li>limited to use cases where active data can fit in memory</li>
+<li>write throughput must be low enough to be handled on a single cpu core, or else
+transactions need to be partitioned without requiring cross-partition coordination</li>
+<li>cross-partition transactions are possible, but there's a hard limit to the extent to which they can be used</li>
+</ul>
+</li>
+<li>
+<p>Two-phase locking</p>
+<ul>
+<li>In 2PL, writers don't just block other writers; they also block readers and vice versa</li>
+</ul>
+</li>
+<li>
+<p>optimistic concurrency control techniques</p>
+<ul>
+<li>Detecting stale MVCC reads
+<ul>
+<li>the database needs to track when a transaction ignores another transaction's writes due to MVCC visibility rules. When the transaction wants to commit, the database checks whether any of the ignored writes have now been committed. If so, the transaction must be aborted.</li>
+</ul>
+</li>
+<li>Detecting writes that affect prior reads
+<ul>
+<li>read is recorded and notified if there's a write later.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="concurrent-issues">Concurrent issues</h1>
+<h2 id="dirty-write">Dirty Write</h2>
+<h2 id="lost-updates">Lost Updates</h2>
+<h3 id="example">example</h3>
+<ul>
+<li>concurrent counter increment example</li>
+</ul>
+<h3 id="how-to-prevent">how to prevent</h3>
+<ul>
+<li>automatically detecting lost updates</li>
+<li>atomic write operations</li>
+<li>explicit locking</li>
+<li>compare and set</li>
+<li>conflict resolution and replication
+<ul>
+<li>locks and compare and set assume there's a single up to date copy of the data</li>
+<li>atomic operations work well in a replicated context, especially if they are commutative</li>
+</ul>
+</li>
+</ul>
+<h2 id="write-skew-phantoms">Write Skew &amp; Phantoms</h2>
+<h3 id="example-1">example</h3>
+<ul>
+<li>oncall doctors</li>
+<li>meeting room booking</li>
+</ul>
+<h3 id="occurance-patterns">occurance patterns</h3>
+<ul>
+<li>issue a query</li>
+<li>make a decision based on the result from the last step</li>
+<li>write result to database which will change the result of the first query</li>
+<li>order of steps can be changed</li>
+</ul>
+<h3 id="how-to-prevent-1">how to prevent</h3>
+<ul>
+<li>true serilization</li>
+<li>lock
+<ul>
+<li>materializing conflicts</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

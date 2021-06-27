@@ -38,7 +38,7 @@ performing the reads. One option would have been to declare the buffer variable 
 messy. Instead, a normal volatile array variable is used, and the class also contains a static
 AtomicReferenceUpdater as follows:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">static </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">, bytes[]&gt;
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">static </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">, bytes[]&gt;
     bufUpdater = </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">newUpdater</span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">,
     </span><span style="color:#b48ead;">byte[]</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">, &quot;</span><span style="color:#a3be8c;">buf</span><span style="color:#c0c5ce;">&quot;);
 </span></code></pre>
@@ -48,7 +48,7 @@ operation can be performed on the volatile variable. Although the update is stat
 of BufferedInputStream has its own buffer of course. So when we perform the CAS operation, we
 need to pass into the updater the actual object whose variable we want to affect:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(bufUpdater.</span><span style="color:#bf616a;">compareAndSet</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">, oldbuffer, newBuffer)) {
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(bufUpdater.</span><span style="color:#bf616a;">compareAndSet</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">, oldbuffer, newBuffer)) {
   ...
 }
 </span></code></pre>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raft Notes</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>Raft Notes</h1>
+<h1 id="rules-for-servers">Rules for Servers</h1>
+<h2 id="all-servers">All Servers</h2>
+<ul>
+<li>If commitIndex &gt; lastApplied: increment lastApplied, apply log[lastApplied] to statemichine</li>
+<li>if RPC request or response contains term T &gt; currentTerm: set currentTerm = T, convert to follower</li>
+</ul>
+<h2 id="followers">Followers</h2>
+<ul>
+<li>Respond to RPCs from candidates and leaders</li>
+<li>If election timeout elapses without receiving AppendEntries RPC from current leader or granting vote to candidate: convert to candidate</li>
+</ul>
+<h2 id="candidates">Candidates</h2>
+<ul>
+<li>On conversion to candidate, start election
+<ul>
+<li>Increment currentTerm</li>
+<li>Vote for self</li>
+<li>Reset election timer</li>
+<li>Send RequestVote RPCs to all other servers</li>
+</ul>
+</li>
+<li>If votes received from majority of servers: become leader</li>
+<li>If AppendEntries RPC received from new leader: convert to follower</li>
+<li>If election timeout elapses: start new election</li>
+</ul>
+<h2 id="leaders">Leaders</h2>
+<ul>
+<li>Upon election: send initial empty AppendEntries RPCs to each server; repeat during idle periods to prevent election timeouts</li>
+<li>append no op to its own log</li>
+<li>If command received from client: append entry to local log, respond after entry applied to state machine</li>
+<li>If last log index &gt;= nextIndex for a follower: send AppendEntries RPC with log entries starting at nextIndex
+<ul>
+<li>If successful: updaet nextIndex and matchIndex for follower</li>
+<li>If fails, decrement nextIndex and retry</li>
+</ul>
+</li>
+<li>If there exists an N such that N &gt; commitIndex, a majority of matchIndex[i] &gt;= N, and log[N].term == currentTerm: set commitIndex = N</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>

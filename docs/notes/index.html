@@ -26,31 +26,55 @@
   
   
   <section class="card preview">
-      <div class="date">2021-02-02</div>
-      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;rust-union-find&#x2F;">Basic Union Find in Rust</a></h1>
-      <div>
-   fn find(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize) -&amp;gt; usize {
-        if g[i] != i {
-            g[i] = Self::find(g, g[i]);
-            g[i]
-        } else {
-            i 
-        }
-    }
-    fn union_fn(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, s: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize, j: usize) {
-        let i = Self::find(g, i);
-        let j = Self::find(g, j);
-        if i != j {
-            if s[j] &amp;gt; s[i] {
-                g[i] = j;
-                s[j] += s[i];
-            } else {
-                g[j] = i;
-                s[i] += s[j];
-            }
-        }
-    }
-</div> 
+      <div class="date">2021-06-12T20:49:00</div>
+      <h1><a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;transactions&#x2F;">Transactions</a></h1>
+      <div>Transactions
+ACID
+Atomicity
+
+Abortability, implemented using write ahead log
+
+Consistency
+
+Satisfy application defined invariant
+
+Isolation
+
+Different isolation levels
+
+Durability
+Atomic operations on single object
+
+compare and set
+atomic increment
+
+Isolation Levels
+Read committed
+Properties
+
+no dirty reads (only read commited result)
+no dirty writes (only override previously commited record)
+
+issues if dirty writes (Bob buy car but invoice sent to alice)
+
+
+
+Implementation
+
+use locks to prevent concurrent writes
+keep old value during writes, and return old value if there&#x27;s a request
+
+Snapshot Isolation &amp;amp; Repeatable Read
+Properties
+Implementation
+
+MVCC
+
+unique monotonically increasing transaction id
+visibility rule
+
+At the time when the reader&#x27;s transaction started, the transaction that created the object had already committed.
+The object is not marked for deletion, or if it is, the transaction that requested deletion had not yet committed at the time when the reader&#x27;s transaction s…</div> 
   </section>
   
 
@@ -60,6 +84,49 @@
 <section class="card feed">
   
 
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;raft&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2021-06-01T20:14:00</div>
+      <h3>Raft Notes</h3>
+      <p>
+        
+          Rules for Servers
+All Servers
+
+If commitIndex &amp;gt; lastApplied: increment lastApplied, apply log[lastApplied] to statemichine
+if RPC request or response contains term T &amp;gt; currentTerm: set currentTerm = T, convert to follower
+
+Followers
+
+Respond to RPCs from candidates and leaders
+If election time… 
+        
+      </p>
+    </div>
+  </a>
+
+  <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;rust-union-find&#x2F;" class="feed-link">
+    <div>
+      <div class="date">2021-02-02</div>
+      <h3>Basic Union Find in Rust</h3>
+      <p>
+        
+          
+   fn find(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize) -&amp;gt; usize {
+        if g[i] != i {
+            g[i] = Self::find(g, g[i]);
+            g[i]
+        } else {
+            i 
+        }
+    }
+    fn union_fn(g: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, s: &amp;amp;mut Vec&amp;lt;usize&amp;gt;, i: usize, j: usize) {
+        … 
+        
+      </p>
+    </div>
+  </a>
 
   <a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;store-aws-iot-device-shadow-data-to-dynamo&#x2F;" class="feed-link">
     <div>

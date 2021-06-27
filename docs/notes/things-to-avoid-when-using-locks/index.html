@@ -28,7 +28,7 @@
 <p>One piece of advice you'll often see is to use an object's hash code to order lock
 acquisition, such as shown here:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashCode</span><span style="color:#c0c5ce;">(left) &lt; </span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashcode</span><span style="color:#c0c5ce;">(right)) {
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashCode</span><span style="color:#c0c5ce;">(left) &lt; </span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashcode</span><span style="color:#c0c5ce;">(right)) {
     first = left; second = right;
 } </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
     first = right; second = left;
@@ -40,7 +40,7 @@ result of the ordering will be nonderministic.</p>
 <p>Large programs often make use of listeners to decouple modules. Here, for example, is a
 class that downloads from a URL and allows ProgressListeners to be registered:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Downloader </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">Thread </span><span style="color:#eff1f5;">{
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Downloader </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">Thread </span><span style="color:#eff1f5;">{
     </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">InputStream </span><span style="color:#eff1f5;">in;
     </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">OutputStream </span><span style="color:#eff1f5;">out;
     </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;">&gt; listeners;
@@ -73,7 +73,7 @@ deadlock.</p>
 <p>The only solution is to avoid calling alien methods while holding a lock. One way to achieve
 this is to make a defensive copy of listeners before iterating through it:</p>
 <pre style="background-color:#2b303b;">
-<code><span style="color:#b48ead;">private</span><span style="color:#c0c5ce;"> void </span><span style="color:#bf616a;">updateProgress</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> n) {
+<code class="language-java" data-lang="java"><span style="color:#b48ead;">private</span><span style="color:#c0c5ce;"> void </span><span style="color:#bf616a;">updateProgress</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> n) {
     </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#c0c5ce;">&gt; listenersCopy;
     </span><span style="color:#b48ead;">synchronized</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">) {
         listenersCopy = listeners.</span><span style="color:#bf616a;">clone</span><span style="color:#c0c5ce;">();
