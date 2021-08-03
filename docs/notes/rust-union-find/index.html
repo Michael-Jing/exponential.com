@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Basic Union Find in Rust</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -23,8 +23,7 @@
     <main>
 <section class="card page">
 <h1>Basic Union Find in Rust</h1>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">   fn find(g: &amp;mut Vec&lt;usize&gt;, i: usize) -&gt; usize {
+<pre><code>   fn find(g: &mut Vec<usize>, i: usize) -> usize {
         if g[i] != i {
             g[i] = Self::find(g, g[i]);
             g[i]
@@ -32,11 +31,11 @@
             i 
         }
     }
-    fn union_fn(g: &amp;mut Vec&lt;usize&gt;, s: &amp;mut Vec&lt;usize&gt;, i: usize, j: usize) {
+    fn union_fn(g: &mut Vec<usize>, s: &mut Vec<usize>, i: usize, j: usize) {
         let i = Self::find(g, i);
         let j = Self::find(g, j);
         if i != j {
-            if s[j] &gt; s[i] {
+            if s[j] > s[i] {
                 g[i] = j;
                 s[j] += s[i];
             } else {
@@ -45,7 +44,8 @@
             }
         }
     }
-</span></code></pre>
+</code></pre>
+
 
 
 

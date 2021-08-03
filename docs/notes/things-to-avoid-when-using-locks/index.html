@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tips on  Using Locks</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -27,42 +27,40 @@
 <h2 id="do-not-use-an-object-s-hash-to-order-locks">Do Not Use an Object's Hash to Order Locks</h2>
 <p>One piece of advice you'll often see is to use an object's hash code to order lock
 acquisition, such as shown here:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashCode</span><span style="color:#c0c5ce;">(left) &lt; </span><span style="color:#ebcb8b;">System</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">identityHashcode</span><span style="color:#c0c5ce;">(right)) {
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">if (System.identityHashCode(left) < System.identityHashcode(right)) {
     first = left; second = right;
-} </span><span style="color:#b48ead;">else </span><span style="color:#c0c5ce;">{
+} else {
     first = right; second = left;
 }
-</span></code></pre>
+</code></pre>
 <p>The issue is that when the two objects left and right have the same hascode, then the
 result of the ordering will be nonderministic.</p>
 <h2 id="do-not-use-alien-methods-while-honlding-a-lock">Do Not Use Alien Methods While Honlding A Lock</h2>
 <p>Large programs often make use of listeners to decouple modules. Here, for example, is a
 class that downloads from a URL and allows ProgressListeners to be registered:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Downloader </span><span style="color:#b48ead;">extends </span><span style="color:#a3be8c;">Thread </span><span style="color:#eff1f5;">{
-    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">InputStream </span><span style="color:#eff1f5;">in;
-    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">OutputStream </span><span style="color:#eff1f5;">out;
-    </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;">&gt; listeners;
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">class Downloader extends Thread {
+    private InputStream in;
+    private OutputStream out;
+    private ArrayList<ProgressListener> listeners;
 
-    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">Downloader</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">URL </span><span style="color:#bf616a;">url</span><span style="color:#eff1f5;">, </span><span style="color:#ebcb8b;">String </span><span style="color:#bf616a;">outputFilename</span><span style="color:#eff1f5;">) </span><span style="color:#b48ead;">throws </span><span style="color:#ebcb8b;">IOException </span><span style="color:#eff1f5;">{
-        in </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> url.</span><span style="color:#bf616a;">openConnection</span><span style="color:#eff1f5;">().</span><span style="color:#bf616a;">getInputStream</span><span style="color:#eff1f5;">();
-        out </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">FileOutputStream</span><span style="color:#eff1f5;">(outputFilename);
-        listeners </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;">&gt;();
+    public Downloader(URL url, String outputFilename) throws IOException {
+        in = url.openConnection().getInputStream();
+        out = new FileOutputStream(outputFilename);
+        listeners = new ArrayList<ProgressListener>();
     }
-    </span><span style="color:#b48ead;">public synchronized void </span><span style="color:#8fa1b3;">addListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener </span><span style="color:#bf616a;">listener</span><span style="color:#eff1f5;">) {
-        listeners.</span><span style="color:#bf616a;">add</span><span style="color:#eff1f5;">(listener);
+    public synchronized void addListener(ProgressListener listener) {
+        listeners.add(listener);
     }
-    </span><span style="color:#b48ead;">public synchronized void </span><span style="color:#8fa1b3;">removeListener</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener </span><span style="color:#bf616a;">listener</span><span style="color:#eff1f5;">) {
-        listeners.</span><span style="color:#bf616a;">remove</span><span style="color:#eff1f5;">(listener);
+    public synchronized void removeListener(ProgressListener listener) {
+        listeners.remove(listener);
     }
-    </span><span style="color:#b48ead;">private synchronized void </span><span style="color:#8fa1b3;">updateProgress</span><span style="color:#eff1f5;">(</span><span style="color:#b48ead;">int </span><span style="color:#bf616a;">n</span><span style="color:#eff1f5;">) {
-        </span><span style="color:#b48ead;">for </span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#eff1f5;"> listener</span><span style="color:#c0c5ce;">:</span><span style="color:#eff1f5;"> listeners)
-            listener.</span><span style="color:#bf616a;">onProgress</span><span style="color:#eff1f5;">(n);
+    private synchronized void updateProgress(int n) {
+        for (ProgressListener listener: listeners)
+            listener.onProgress(n);
     }
 }
 
-</span></code></pre>
+</code></pre>
 <p>Because addListener(), removeListener(), and updateProgress() are all synchronized, multiple
 threads can can them without stepping on one another's toes. But a trap lurks in this code
 that could leak to deadlock enev though there's only a single lock in use.</p>
@@ -72,16 +70,15 @@ acquired two locks without knowing whether we've done so in the right order. Tha
 deadlock.</p>
 <p>The only solution is to avoid calling alien methods while holding a lock. One way to achieve
 this is to make a defensive copy of listeners before iterating through it:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">private</span><span style="color:#c0c5ce;"> void </span><span style="color:#bf616a;">updateProgress</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">int</span><span style="color:#c0c5ce;"> n) {
-    </span><span style="color:#ebcb8b;">ArrayList</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#c0c5ce;">&gt; listenersCopy;
-    </span><span style="color:#b48ead;">synchronized</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">) {
-        listenersCopy = listeners.</span><span style="color:#bf616a;">clone</span><span style="color:#c0c5ce;">();
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">private void updateProgress(int n) {
+    ArrayList<ProgressListener> listenersCopy;
+    synchronized(this) {
+        listenersCopy = listeners.clone();
     }
-    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">ProgressListener</span><span style="color:#c0c5ce;"> listener: listenersCopy)
-        listener.</span><span style="color:#bf616a;">onProgress</span><span style="color:#c0c5ce;">(n);
+    for (ProgressListener listener: listenersCopy)
+        listener.onProgress(n);
 }
-</span></code></pre>
+</code></pre>
 <p>This change kills several birds with one stone. Not only does it avoid calling an alien
 method with a lock held, it also minimizes the period during which we hold the lock. Holding
 locks for longer than necessary both hurts performance (by restricting the degree of achievable concurrency) and increases the dange of deadlock. This change also fixes another buy that

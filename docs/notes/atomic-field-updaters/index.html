@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Atomic field updaters</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -37,21 +37,20 @@ grow it or to mark it as null or closed), because closure can occur in a differe
 performing the reads. One option would have been to declare the buffer variable as a AtomicReference to an array, and always get and set the array via this variable. But that would be a bit
 messy. Instead, a normal volatile array variable is used, and the class also contains a static
 AtomicReferenceUpdater as follows:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">static </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">&lt;</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">, bytes[]&gt;
-    bufUpdater = </span><span style="color:#ebcb8b;">AtomicReferenceFieldUpdater</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">newUpdater</span><span style="color:#c0c5ce;">(</span><span style="color:#ebcb8b;">BufferedInputStream</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">,
-    </span><span style="color:#b48ead;">byte[]</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">class</span><span style="color:#c0c5ce;">, &quot;</span><span style="color:#a3be8c;">buf</span><span style="color:#c0c5ce;">&quot;);
-</span></code></pre>
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">static AtomicReferenceFieldUpdater<BufferedInputStream, bytes[]>
+    bufUpdater = AtomicReferenceFieldUpdater.newUpdater(BufferedInputStream.class,
+    byte[].class, "buf");
+</code></pre>
 <p>The array itself still remains a normal (volatile) variable, and reads and writes from the array
 can use normal array syntax. But when necessary, via the field updater, an atomic comparae-and-set
 operation can be performed on the volatile variable. Although the update is static, each instance
 of BufferedInputStream has its own buffer of course. So when we perform the CAS operation, we
 need to pass into the updater the actual object whose variable we want to affect:</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">if </span><span style="color:#c0c5ce;">(bufUpdater.</span><span style="color:#bf616a;">compareAndSet</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">this</span><span style="color:#c0c5ce;">, oldbuffer, newBuffer)) {
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">if (bufUpdater.compareAndSet(this, oldbuffer, newBuffer)) {
   ...
 }
-</span></code></pre>
+</code></pre>
+
 
 
 

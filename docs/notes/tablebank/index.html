@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Table Detection</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -32,15 +32,13 @@ in the process</p>
 <li>Caffe2
 Install Caffe2 by installing prebuilt pytorch binary</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
+<pre><code>conda install pytorch torchvision cudatoolkit=9.0 -c pytorch
 
-</span></code></pre>
+</code></pre>
 <ul>
 <li>Cocoapi</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;"># COCOAPI=/path/to/clone/cocoapi
+<pre><code># COCOAPI=/path/to/clone/cocoapi
 git clone https://github.com/cocodataset/cocoapi.git $COCOAPI
 cd $COCOAPI/PythonAPI
 pip install cython
@@ -50,21 +48,20 @@ make install
 # not to install the COCO API into global site-packages
 python setup.py install --user
 
-</span></code></pre>
+</code></pre>
 <ul>
 <li>Detectron</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">git clone https://github.com/facebookresearch/detectron
+<pre><code>git clone https://github.com/facebookresearch/detectron
 pip install -r detectron/requirements.txt
-cd detectron &amp;&amp; make
+cd detectron && make
 # in order to not accidently interfier with others, use CUDA_VISIBLE_DEVICES to specify the gpu you want to use
 python detectron/detectron/tests/test_spatial_narrow_as_op.py
-</span></code></pre><h1 id="inference-with-tablebank-pretrained-model">Inference with Tablebank pretrained model</h1>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">python tools/infer_simple.py --cfg $CONFIG_MODEL --output-dir /tmp/detectron-tablebank --image-ext jpg \
+</code></pre>
+<h1 id="inference-with-tablebank-pretrained-model">Inference with Tablebank pretrained model</h1>
+<pre><code>python tools/infer_simple.py --cfg $CONFIG_MODEL --output-dir /tmp/detectron-tablebank --image-ext jpg \
     --wts $MODEL_PATH /home/shr/TableBank/data/Sampled_Detection_data/Latex/images
-</span></code></pre>
+</code></pre>
 <ol>
 <li>Download weights and configuration file from [Model Zoo]</li>
 </ol>

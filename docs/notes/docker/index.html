@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -23,8 +23,7 @@
     <main>
 <section class="card page">
 <h1></h1>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">FROM continuumio/miniconda
+<pre><code>FROM continuumio/miniconda
 
 RUN mkdir -p /app/bin/mlocr
 
@@ -42,11 +41,12 @@ ENV PYTHONPATH /app/bin/mlocr:$PYTHONPATH
 
 WORKDIR /app/bin/mlocr
 
-ENTRYPOINT [ &quot;/opt/conda/envs/mlocr/bin/python&quot; ]
+ENTRYPOINT [ "/opt/conda/envs/mlocr/bin/python" ]
 
-CMD [ &quot;app.py&quot; ]
+CMD [ "app.py" ]
 
-</span></code></pre>
+</code></pre>
+
 
 
 

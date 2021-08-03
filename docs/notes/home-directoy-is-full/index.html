@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Manage Home Directory</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -26,17 +26,17 @@
 <p>We share GPU box and we use anaconda to manage our Python environments these days. Then sooner or
 later we'll encounter the issue that the home directory of the box is full. In this case, we can
 use the following procedure to solve the problem</p>
-<pre style="background-color:#2b303b;">
-<code class="language-bash" data-lang="bash"><span style="color:#96b5b4;">cd </span><span style="color:#bf616a;">~
-</span><span style="color:#65737e;"># Find out which file or directory uses the most space
-</span><span style="color:#c0c5ce;">du -s ./*
-</span><span style="color:#bf616a;">du -s</span><span style="color:#c0c5ce;"> ./.* </span><span style="color:#65737e;"># check hidden files
+<pre data-lang="bash" class="language-bash "><code class="language-bash" data-lang="bash">cd ~
+# Find out which file or directory uses the most space
+du -s ./*
+du -s ./.* # check hidden files
 # move the biggest directory to another location, such as .canda here
-</span><span style="color:#c0c5ce;">mv .canda /data/yanq/
-</span><span style="color:#65737e;"># then link it back
-</span><span style="color:#c0c5ce;">ln</span><span style="color:#bf616a;"> -s</span><span style="color:#c0c5ce;"> /data/yanq/.conda .
+mv .canda /data/yanq/
+# then link it back
+ln -s /data/yanq/.conda .
 
-</span></code></pre>
+</code></pre>
+
 
 
 

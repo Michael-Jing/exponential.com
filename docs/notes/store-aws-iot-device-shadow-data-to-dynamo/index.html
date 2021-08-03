@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Get Data From AWS IoT Device Shadow and Store In Dynamodb</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -30,120 +30,116 @@ My plan is that I'm going to create a Rule that reads from device shadows and st
 <p>I plan to collect data from each device shadow's /update/documents topic, so the full
 topic would be <code>&quot;$aws/things/thingName/shadow/name/shadowName/update/documents&quot;</code></p>
 <p>an example message from the topic is like the following</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">{
-  &quot;previous&quot; : {
-    &quot;state&quot;: {
-        &quot;desired&quot;: {
-            &quot;attribute1&quot;: integer2,
-            &quot;attribute2&quot;: &quot;string2&quot;,
+<pre><code>{
+  "previous" : {
+    "state": {
+        "desired": {
+            "attribute1": integer2,
+            "attribute2": "string2",
             ...
-            &quot;attributeN&quot;: boolean2
+            "attributeN": boolean2
         },
-        &quot;reported&quot;: {
-            &quot;attribute1&quot;: integer1,
-            &quot;attribute2&quot;: &quot;string1&quot;,
+        "reported": {
+            "attribute1": integer1,
+            "attribute2": "string1",
             ...
-            &quot;attributeN&quot;: boolean1
+            "attributeN": boolean1
         }
     },
-    &quot;metadata&quot;: {
-        &quot;desired&quot;: {
-            &quot;attribute1&quot;: {
-                &quot;timestamp&quot;: timestamp
+    "metadata": {
+        "desired": {
+            "attribute1": {
+                "timestamp": timestamp
             },
-            &quot;attribute2&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attribute2": {
+                "timestamp": timestamp
             },
             ...
-            &quot;attributeN&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attributeN": {
+                "timestamp": timestamp
             }
         },
-        &quot;reported&quot;: {
-            &quot;attribute1&quot;: {
-                &quot;timestamp&quot;: timestamp
+        "reported": {
+            "attribute1": {
+                "timestamp": timestamp
             },
-            &quot;attribute2&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attribute2": {
+                "timestamp": timestamp
             },
             ...
-            &quot;attributeN&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attributeN": {
+                "timestamp": timestamp
             }
         }
     },
-    &quot;version&quot;: version-1
+    "version": version-1
   },
-  &quot;current&quot;: {
-    &quot;state&quot;: {
-        &quot;desired&quot;: {
-            &quot;attribute1&quot;: integer2,
-            &quot;attribute2&quot;: &quot;string2&quot;,
+  "current": {
+    "state": {
+        "desired": {
+            "attribute1": integer2,
+            "attribute2": "string2",
             ...
-            &quot;attributeN&quot;: boolean2
+            "attributeN": boolean2
         },
-        &quot;reported&quot;: {
-            &quot;attribute1&quot;: integer2,
-            &quot;attribute2&quot;: &quot;string2&quot;,
+        "reported": {
+            "attribute1": integer2,
+            "attribute2": "string2",
             ...
-            &quot;attributeN&quot;: boolean2
+            "attributeN": boolean2
         }
     },
-    &quot;metadata&quot;: {
-        &quot;desired&quot;: {
-            &quot;attribute1&quot;: {
-                &quot;timestamp&quot;: timestamp
+    "metadata": {
+        "desired": {
+            "attribute1": {
+                "timestamp": timestamp
             },
-            &quot;attribute2&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attribute2": {
+                "timestamp": timestamp
             },
             ...
-            &quot;attributeN&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attributeN": {
+                "timestamp": timestamp
             }
         },
-        &quot;reported&quot;: {
-            &quot;attribute1&quot;: {
-                &quot;timestamp&quot;: timestamp
+        "reported": {
+            "attribute1": {
+                "timestamp": timestamp
             },
-            &quot;attribute2&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attribute2": {
+                "timestamp": timestamp
             },
             ...
-            &quot;attributeN&quot;: {
-                &quot;timestamp&quot;: timestamp
+            "attributeN": {
+                "timestamp": timestamp
             }
         }
     },
-    &quot;version&quot;: version
+    "version": version
   },
-  &quot;timestamp&quot;: timestamp,
-  &quot;clientToken&quot;: &quot;token&quot;
+  "timestamp": timestamp,
+  "clientToken": "token"
 }
-</span></code></pre>
+</code></pre>
 <p>and data will be retrieved from the <code>current/state/reported</code> paths</p>
 <h1 id="create-rule-to-collect-data-from-topics">Create Rule to collect data from topics</h1>
 <p>Here is an example Rule query statement</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">   SELECT
-  &#39;The fuel level for &#39; + device + &#39; is currently at &#39; + round(fuel_level) + &#39;%. The car is at &#39;
-  + longitude + &#39; of longitude and &#39; + latitude + &#39; of latitude.&#39; AS message
-FROM &#39;topicName&#39;
+<pre><code>   SELECT
+  'The fuel level for ' + device + ' is currently at ' + round(fuel_level) + '%. The car is at '
+  + longitude + ' of longitude and ' + latitude + ' of latitude.' AS message
+FROM 'topicName'
 WHERE
-  fuel_level &lt; 25
-</span></code></pre>
+  fuel_level < 25
+</code></pre>
 <p>Since I don't want to crate a rule for each thing, so I'm going to use wildcard to specify multiple topics for the topicName field, it's called a topic filter.
 two wildcard is available, '#' means multi-level and '+' means single-level. Suppose I want to collect data from all things which has a certain prefix in their
 name, and all theses thins each has a shadow of the same name, the topic filter I'm going to use is</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">&quot;$aws/things/thingNamePrefix+/shadow/name/shadowName/update/documents&quot;
-</span></code></pre>
+<pre><code>"$aws/things/thingNamePrefix+/shadow/name/shadowName/update/documents"
+</code></pre>
 <p>Unfortunately, the above topic filter does not work, since both '#' and '*' need to be the single character in its path level (between two slashes), so a working
 topic filter would be like the following</p>
-<pre style="background-color:#2b303b;">
-<code><span style="color:#c0c5ce;">&quot;$aws/things/+/shadow/name/shadowName/update/documents&quot;
-</span></code></pre>
+<pre><code>"$aws/things/+/shadow/name/shadowName/update/documents"
+</code></pre>
 <p>So now the problem is how can we compose a rule that only works for some type of things, but I don't have an answer yet.</p>
 
 

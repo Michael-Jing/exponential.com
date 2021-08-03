@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -34,37 +34,37 @@
 * fanout might need a few hours for a celebrity</li>
 </ul>
 <h2 id="the-right-approach">The right approach</h2>
-<pre style="background-color:#2b303b;">
-<code>* Try to solve the problem with the minimum code change
+<pre><code>* Try to solve the problem with the minimum code change
     * add more machines in peak hours
 * Evaluate the longterm trend to decide wether to change
-</code></pre><h2 id="other-approaches">Other approaches</h2>
-<pre style="background-color:#2b303b;">
-<code>* Push for ordinary user
+</code></pre>
+<h2 id="other-approaches">Other approaches</h2>
+<pre><code>* Push for ordinary user
 * Pull for celebrity user
 * Preiodically to update wether a user is celebrity
-</code></pre><h1 id="design-user-system">Design User System</h1>
+</code></pre>
+<h1 id="design-user-system">Design User System</h1>
 <h2 id="scenario">Scenario</h2>
-<pre style="background-color:#2b303b;">
-<code>* register, login, search, user info update
-</code></pre><h2 id="service">Service</h2>
-<pre style="background-color:#2b303b;">
-<code>* AuthService (responsible for login and register)
+<pre><code>* register, login, search, user info update
+</code></pre>
+<h2 id="service">Service</h2>
+<pre><code>* AuthService (responsible for login and register)
 * UserService (Query and store of user info)
 * FriendshipService
-</code></pre><h2 id="property">Property</h2>
-<pre style="background-color:#2b303b;">
-<code>* user system: read a lot, write a little, so must use cache to speed up
-</code></pre><h2 id="memcached">Memcached</h2>
+</code></pre>
+<h2 id="property">Property</h2>
+<pre><code>* user system: read a lot, write a little, so must use cache to speed up
+</code></pre>
+<h2 id="memcached">Memcached</h2>
 <h2 id="authentication">Authentication</h2>
 <h2 id="sql-vs-nosql">SQL vs NoSQL</h2>
 <h2 id="friendship">Friendship</h2>
 <h2 id="how-to-scale">How to scale</h2>
-<pre style="background-color:#2b303b;">
-<code>* sharding
+<pre><code>* sharding
 * consistent hashing
 * replica
 </code></pre>
+
 
 
 

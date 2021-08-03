@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ReentrantLock in Java</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -31,16 +31,15 @@
 <li>Conditional variables is introduced
 pattern to use conditional variables</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#ebcb8b;">ReentrantLock</span><span style="color:#c0c5ce;"> lock = </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">ReentrantLock</span><span style="color:#c0c5ce;">();
-</span><span style="color:#ebcb8b;">Condition</span><span style="color:#c0c5ce;"> condition = lock.</span><span style="color:#bf616a;">newCondition</span><span style="color:#c0c5ce;">();
-</span><span style="color:#c0c5ce;">lock.</span><span style="color:#bf616a;">lock</span><span style="color:#c0c5ce;">();
-</span><span style="color:#b48ead;">try </span><span style="color:#c0c5ce;">{
-</span><span style="color:#c0c5ce;">   </span><span style="color:#b48ead;">while </span><span style="color:#c0c5ce;">(!&lt;&lt;condition is </span><span style="color:#d08770;">true</span><span style="color:#c0c5ce;">&gt;&gt;)
-</span><span style="color:#c0c5ce;">       condition.</span><span style="color:#bf616a;">await</span><span style="color:#c0c5ce;">();
-</span><span style="color:#c0c5ce;">   « use shared resource&gt;&gt;
-</span><span style="color:#c0c5ce;">} </span><span style="color:#b48ead;">finally </span><span style="color:#c0c5ce;">{lock.</span><span style="color:#bf616a;">unlock</span><span style="color:#c0c5ce;">(); }
-</span></code></pre>
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">ReentrantLock lock = new ReentrantLock();
+Condition condition = lock.newCondition();
+lock.lock();
+try {
+   while (!<<condition is true>>)
+       condition.await();
+   « use shared resource>>
+} finally {lock.unlock(); }
+</code></pre>
 <p>A thread must hold the associated lock before being able to wait on the condition. if the condition is not true, it calls <code>await()</code>
 , which atomically unlocks the lock and blocks on the condition variable.</p>
 <p>When another thread calls <code>singal()</code> or <code>singnalAll()</code> to indicate that

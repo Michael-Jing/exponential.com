@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correct Way to Do Double Locking</title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -23,65 +23,63 @@
     <main>
 <section class="card page">
 <h1>Correct Way to Do Double Locking</h1>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
-    </span><span style="color:#b48ead;">private volatile </span><span style="color:#ebcb8b;">Helper </span><span style="color:#eff1f5;">helper </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">;
-    </span><span style="color:#b48ead;">public </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
-        </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;"> result </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helper;
-        </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(result </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
-            </span><span style="color:#b48ead;">synchronized</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">) {
-                result </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helper;
-                </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(result </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
-                    helper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> result </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">();
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">class Foo {
+    private volatile Helper helper = null;
+    public Helper getHelper() {
+        Helper result = helper;
+        if (result == null) {
+            synchronized(this) {
+                result = helper;
+                if (result == null) {
+                    helper = result = new Helper();
                 }
             }
         }
-        </span><span style="color:#b48ead;">return</span><span style="color:#eff1f5;"> result;
+        return result;
     }
 
-    </span><span style="color:#65737e;">// other functions and members...
-</span><span style="color:#eff1f5;">}
-</span></code></pre>
+    // other functions and members...
+}
+</code></pre>
 <p>Another way that works</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#bf616a;">T</span><span style="color:#eff1f5;">&gt; {
-    </span><span style="color:#b48ead;">public final </span><span style="color:#ebcb8b;">T </span><span style="color:#eff1f5;">value;
-    </span><span style="color:#b48ead;">public </span><span style="color:#8fa1b3;">FinalWrapper</span><span style="color:#eff1f5;">(</span><span style="color:#ebcb8b;">T </span><span style="color:#bf616a;">value</span><span style="color:#eff1f5;">) {
-        </span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">.value </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> value;
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">public class FinalWrapper<T> {
+    public final T value;
+    public FinalWrapper(T value) {
+        this.value = value;
     }
 }
 
-</span><span style="color:#b48ead;">public class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
-   </span><span style="color:#b48ead;">private </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt; helperWrapper </span><span style="color:#c0c5ce;">= </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">;
+public class Foo {
+   private FinalWrapper<Helper> helperWrapper = null;
 
-   </span><span style="color:#b48ead;">public </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
-      </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt; wrapper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helperWrapper;
+   public Helper getHelper() {
+      FinalWrapper<Helper> wrapper = helperWrapper;
 
-      </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(wrapper </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
-          </span><span style="color:#b48ead;">synchronized</span><span style="color:#eff1f5;">(</span><span style="color:#bf616a;">this</span><span style="color:#eff1f5;">) {
-              </span><span style="color:#b48ead;">if </span><span style="color:#eff1f5;">(helperWrapper </span><span style="color:#c0c5ce;">== </span><span style="color:#d08770;">null</span><span style="color:#eff1f5;">) {
-                  helperWrapper </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">FinalWrapper</span><span style="color:#eff1f5;">&lt;</span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">&gt;(</span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">());
+      if (wrapper == null) {
+          synchronized(this) {
+              if (helperWrapper == null) {
+                  helperWrapper = new FinalWrapper<Helper>(new Helper());
               }
-              wrapper </span><span style="color:#c0c5ce;">=</span><span style="color:#eff1f5;"> helperWrapper;
+              wrapper = helperWrapper;
           }
       }
-      </span><span style="color:#b48ead;">return</span><span style="color:#eff1f5;"> wrapper.value;
+      return wrapper.value;
    }
 }
-</span></code></pre>
+</code></pre>
 <p>if the wanted object is static, then lazy initialization pattern could be used</p>
-<pre style="background-color:#2b303b;">
-<code class="language-java" data-lang="java"><span style="color:#c0c5ce;">@</span><span style="color:#bf616a;">ThreadSafe
-</span><span style="color:#b48ead;">class </span><span style="color:#ebcb8b;">Foo </span><span style="color:#eff1f5;">{
-    </span><span style="color:#b48ead;">private static class </span><span style="color:#ebcb8b;">HelperHolder </span><span style="color:#eff1f5;">{
-       </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Helper </span><span style="color:#eff1f5;">helper </span><span style="color:#c0c5ce;">= </span><span style="color:#b48ead;">new </span><span style="color:#ebcb8b;">Helper</span><span style="color:#eff1f5;">();
+<pre data-lang="java" class="language-java "><code class="language-java" data-lang="java">@ThreadSafe
+class Foo {
+    private static class HelperHolder {
+       public static Helper helper = new Helper();
     }
 
-    </span><span style="color:#b48ead;">public static </span><span style="color:#ebcb8b;">Helper </span><span style="color:#8fa1b3;">getHelper</span><span style="color:#eff1f5;">() {
-        </span><span style="color:#b48ead;">return </span><span style="color:#ebcb8b;">HelperHolder</span><span style="color:#eff1f5;">.helper;
+    public static Helper getHelper() {
+        return HelperHolder.helper;
     }
 }
-</span></code></pre>
+</code></pre>
+
 
 
 

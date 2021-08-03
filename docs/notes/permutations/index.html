@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title></title>
   <meta name="description" content="">
-  <link rel="stylesheet" type="text/css" href="https:&#x2F;&#x2F;randominit.xyz&#x2F;base.css">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
   
 
 
@@ -26,22 +26,21 @@
 <p>The answer is from https://leetcode.com/problems/permutations/discuss/18241/One-Liners-in-Python, I put it here for my own reference</p>
 <h1 id="solution-1-recursive-take-any-number-as-first">Solution 1: Recursive, take any number as first</h1>
 <p>Take any number as the first number and append any permutation of the other numbers.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">permute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">nums</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">[[n] + p </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">i, n </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">enumerate</span><span style="color:#c0c5ce;">(nums) </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">p </span><span style="color:#b48ead;">in </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">permute</span><span style="color:#c0c5ce;">(nums[:i] + nums[i + </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">: ])] or [[]]
-</span></code></pre>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def permute(self, nums):
+    return [[n] + p for i, n in enumerate(nums) for p in self.permute(nums[:i] + nums[i + 1: ])] or [[]]
+</code></pre>
 <p>when nums is empty, the first term will be [] and [] or [[]] will be [[]] which is the correct answer</p>
 <h1 id="solution-2-recursive-insert-first-number-anywhere">Solution 2: Recursive, insert first number anywhere</h1>
 <p>insert the first number anywhere in any permutation of the remaining numbers.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">permute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">nums</span><span style="color:#c0c5ce;">: &#39;</span><span style="color:#a3be8c;">List[int]</span><span style="color:#c0c5ce;">&#39;) -&gt; &#39;</span><span style="color:#a3be8c;">List[List[int]]</span><span style="color:#c0c5ce;">&#39;:
-    </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">nums and [p[:i] + [nums[</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">]] + p[i:] </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">p </span><span style="color:#b48ead;">in </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#bf616a;">permute</span><span style="color:#c0c5ce;">(nums[</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">:]) </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">i </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">range</span><span style="color:#c0c5ce;">(</span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">(nums))] or [[]]
-</span></code></pre><h1 id="solution-3-reduce-insert-next-number-anywhere">Solution 3: Reduce, insert next number anywhere</h1>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def permute(self, nums: 'List[int]') -> 'List[List[int]]':
+    return nums and [p[:i] + [nums[0]] + p[i:] for p in self.permute(nums[1:]) for i in range(len(nums))] or [[]]
+</code></pre>
+<h1 id="solution-3-reduce-insert-next-number-anywhere">Solution 3: Reduce, insert next number anywhere</h1>
 <p>Use reduce to insert the next number anywhere in the already built permutations.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-python" data-lang="python"><span style="color:#b48ead;">def </span><span style="color:#8fa1b3;">permute</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">nums</span><span style="color:#c0c5ce;">):
-    </span><span style="color:#b48ead;">return </span><span style="color:#96b5b4;">reduce</span><span style="color:#c0c5ce;">(</span><span style="color:#b48ead;">lambda </span><span style="color:#bf616a;">P</span><span style="color:#c0c5ce;">, </span><span style="color:#bf616a;">n</span><span style="color:#c0c5ce;">: [p[:i] + [n] + p[i:] </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">p </span><span style="color:#b48ead;">in </span><span style="color:#c0c5ce;">P </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">i </span><span style="color:#b48ead;">in </span><span style="color:#96b5b4;">range</span><span style="color:#c0c5ce;">(</span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">(p) + </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">)], nums, [[]])
-</span></code></pre><h1 id="solution-4-lexicographical-order-this-approach-can-also-deal-with-the-situation-that-there-are-duplicates-in-the-input-numbers">Solution 4: lexicographical order, this approach can also deal with the situation that there are duplicates in the input numbers</h1>
+<pre data-lang="python" class="language-python "><code class="language-python" data-lang="python">def permute(self, nums):
+    return reduce(lambda P, n: [p[:i] + [n] + p[i:] for p in P for i in range(len(p) + 1)], nums, [[]])
+</code></pre>
+<h1 id="solution-4-lexicographical-order-this-approach-can-also-deal-with-the-situation-that-there-are-duplicates-in-the-input-numbers">Solution 4: lexicographical order, this approach can also deal with the situation that there are duplicates in the input numbers</h1>
 <p>the idea is to start with the ascending ordered numbers and change it into the next leicographical order
 there are 4 steps to change a sequence to it's next lexicographical order</p>
 <ol>

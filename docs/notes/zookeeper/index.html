@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZooKeeper notes</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" type="text/css" href="https://randominit.xyz/base.css">
+  
+
+
+</head>
+<body>
+  <div id="container">
+    <header><a href="https:&#x2F;&#x2F;randominit.xyz"><h1><img id="title_pic" alt="" src="&#x2F;favicon.ico"/>Michael&#x27;s Notes &amp; Blog</h1></a></header>
+    <nav>
+
+<a href="https:&#x2F;&#x2F;randominit.xyz&#x2F;notes&#x2F;"
+    class="active">
+    Notes
+</a>
+</nav>
+    <main>
+<section class="card page">
+<h1>ZooKeeper notes</h1>
+<h1 id="zookeeper">ZooKeeper</h1>
+<h2 id="key-words">Key Words:</h2>
+<ul>
+<li>group messaging</li>
+<li>shared registers</li>
+<li>distributed lock service</li>
+<li>wait-free</li>
+<li>manipulates simple wait-free data objects organized hierarchically as in file systems</li>
+<li>Zab (leader-based atomic broadcast protocol) to provide linearizability</li>
+<li>relaxed consistency guarantees</li>
+<li>watch</li>
+<li>A-linearizability</li>
+</ul>
+<h2 id="data-model">Data model</h2>
+<ul>
+<li>file system</li>
+</ul>
+<h2 id="sessions">Sessions</h2>
+<ul>
+<li>Sessions enable a client to move transparently from one server to another within a ZooKeeper ensemble, and hence persist across ZooKeeper servers</li>
+</ul>
+<h2 id="services-can-be-implemented">Services can be implemented</h2>
+<ul>
+<li>Lock with/without herd effect</li>
+<li>Read/Write Locks</li>
+<li>Double Barrier</li>
+<li>Configuration Management</li>
+<li>Group Membership</li>
+<li>Rendezvous</li>
+<li></li>
+</ul>
+<h2 id="node-types">Node Types</h2>
+<ul>
+<li>regular</li>
+<li>ephemeral</li>
+<li>sequential</li>
+</ul>
+<h2 id="client-api">Client API</h2>
+<ul>
+<li>create(path, data, flags)</li>
+<li>delete(path, version)</li>
+<li>exists(path, watch)</li>
+<li>getData(path, watch)</li>
+<li>setData(path, data, version)</li>
+<li>getChildren(path, watch)</li>
+<li>sync(path)</li>
+</ul>
+<h2 id="zookeeper-guarantees">ZooKeeper guarantees</h2>
+<h3 id="linearizable-writes-a-linearizability">Linearizable writes (A-linearizability)</h3>
+<ul>
+<li>all requests that update the state of ZooKeeper are serializable and respect precedence</li>
+</ul>
+<h3 id="fifo-client-order">FIFO client order</h3>
+<ul>
+<li>all requests from a given client are exeuted in the order that they were sent by the client</li>
+</ul>
+
+
+
+
+</section>
+</main>
+    <footer>
+<div class="card">
+Made with <a href="http://getzola.org/">Zola</a>, static site generator in <a href="https://www.rust-lang.org/">Rust</a>.
+</div>
+<div id="license"></div>
+<br>
+</footer>
+  </div>
+</body>
+</html>
