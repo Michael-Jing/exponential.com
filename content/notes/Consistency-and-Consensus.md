@@ -20,3 +20,16 @@ date=   2021-07-22 11:04:00
 #### Locking and leader election
 
 #### Constraints and uniqueness guarantees
+
+#### Cross-channel timing dependencies
+
+### Implementing Linearizable Systems
+* Single-leader replication (potentially linerizable)
+* Consensus algorithms (linearizable)
+* Multi-leader replication (not linearizable)
+* Leaderless replication (probably not linearizable)
+
+### The Cost of Linearizability
+* CAP theorem
+* Linearizability is slow (even memory of multi-core cpu is not linearizable)
+

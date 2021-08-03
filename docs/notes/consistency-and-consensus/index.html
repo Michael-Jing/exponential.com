@@ -43,6 +43,19 @@
 <h3 id="relying-on-linearizability">Relying on Linearizability</h3>
 <h4 id="locking-and-leader-election">Locking and leader election</h4>
 <h4 id="constraints-and-uniqueness-guarantees">Constraints and uniqueness guarantees</h4>
+<h4 id="cross-channel-timing-dependencies">Cross-channel timing dependencies</h4>
+<h3 id="implementing-linearizable-systems">Implementing Linearizable Systems</h3>
+<ul>
+<li>Single-leader replication (potentially linerizable)</li>
+<li>Consensus algorithms (linearizable)</li>
+<li>Multi-leader replication (not linearizable)</li>
+<li>Leaderless replication (probably not linearizable)</li>
+</ul>
+<h3 id="the-cost-of-linearizability">The Cost of Linearizability</h3>
+<ul>
+<li>CAP theorem</li>
+<li>Linearizability is slow (even memory of multi-core cpu is not linearizable)</li>
+</ul>
 
 
 
